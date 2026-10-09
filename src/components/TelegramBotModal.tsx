@@ -59,19 +59,34 @@ export const TelegramBotModal: React.FC<TelegramBotModalProps> = ({
 
     try {
       // Send to server's Telegram Webhook route
+      const payload: any = {
+        update_id: Date.now(),
+      };
+
+      if (text.startsWith("cb:")) {
+        payload.callback_query = {
+          id: "cq_" + Date.now(),
+          from: { id: 6138197737, first_name: "Hendy Admin", username: "hendy_admin" },
+          message: {
+            message_id: Math.floor(Math.random() * 1000),
+            chat: { id: 6138197737, type: "private" },
+          },
+          data: text.replace(/^cb:/, ""),
+        };
+      } else {
+        payload.message = {
+          message_id: Math.floor(Math.random() * 1000),
+          from: { id: 6138197737, first_name: "Hendy Admin", username: "hendy_admin" },
+          chat: { id: 6138197737, type: "private" },
+          date: Math.floor(Date.now() / 1000),
+          text,
+        };
+      }
+
       const res = await fetch("/api/telegram/webhook", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          update_id: Date.now(),
-          message: {
-            message_id: Math.floor(Math.random() * 1000),
-            from: { id: 718291029, first_name: "User", username: "telegram_user" },
-            chat: { id: 718291029, type: "private" },
-            date: Math.floor(Date.now() / 1000),
-            text,
-          },
-        }),
+        body: JSON.stringify(payload),
       });
 
       const data = await res.json();
@@ -124,6 +139,8 @@ export const TelegramBotModal: React.FC<TelegramBotModalProps> = ({
       handleSendMessage("/admin");
     } else if (btn.url) {
       window.open(btn.url, "_blank");
+    } else {
+      handleSendMessage("cb:" + btn.action);
     }
   };
 

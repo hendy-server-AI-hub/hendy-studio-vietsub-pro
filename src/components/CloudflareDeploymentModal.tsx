@@ -18,6 +18,8 @@ import {
   Radio,
   FileCode,
   Mic,
+  Send,
+  KeyRound,
 } from "lucide-react";
 
 interface CloudflareDeploymentModalProps {
@@ -32,10 +34,16 @@ export const CloudflareDeploymentModal: React.FC<CloudflareDeploymentModalProps>
   onNotify,
 }) => {
   const [accountId, setAccountId] = useState(
-    localStorage.getItem("cf_account_id") || ""
+    localStorage.getItem("cf_account_id") || "6b19a1283d0c9f120894ac00918731ad"
   );
   const [apiToken, setApiToken] = useState(
     localStorage.getItem("cf_api_token") || ""
+  );
+  const [botToken, setBotToken] = useState(
+    localStorage.getItem("tg_bot_token") || "8517026315:AAELCCiSvwQb-9AWi0VRRMQvT7Pf6rAZzP8"
+  );
+  const [adminId, setAdminId] = useState(
+    localStorage.getItem("tg_admin_id") || "6138197737"
   );
   const [testingConnection, setTestingConnection] = useState(false);
   const [connectionStatus, setConnectionStatus] = useState<
@@ -83,7 +91,9 @@ export const CloudflareDeploymentModal: React.FC<CloudflareDeploymentModalProps>
   const handleSaveCredentials = () => {
     localStorage.setItem("cf_account_id", accountId.trim());
     localStorage.setItem("cf_api_token", apiToken.trim());
-    onNotify?.("Đã lưu cấu hình Cloudflare Workers AI vào trình duyệt!", "success");
+    localStorage.setItem("tg_bot_token", botToken.trim());
+    localStorage.setItem("tg_admin_id", adminId.trim());
+    onNotify?.("Đã lưu cấu hình Cloudflare & Bot Credentials vào trình duyệt!", "success");
     checkStatus();
   };
 
@@ -269,6 +279,34 @@ export const CloudflareDeploymentModal: React.FC<CloudflareDeploymentModalProps>
                       onChange={(e) => setApiToken(e.target.value)}
                       placeholder="Nhập Cloudflare API Token của bạn..."
                       className="w-full px-3.5 py-2.5 bg-slate-900 border border-slate-700/80 rounded-xl text-xs text-white font-mono placeholder-slate-500 focus:outline-none focus:border-orange-500"
+                    />
+                  </div>
+
+                  <div className="pt-2 border-t border-slate-800">
+                    <label className="block text-xs font-medium text-slate-300 mb-1 flex items-center gap-1.5">
+                      <Send className="w-3.5 h-3.5 text-sky-400" />
+                      Telegram Bot Token (Worker Webhook):
+                    </label>
+                    <input
+                      type="text"
+                      value={botToken}
+                      onChange={(e) => setBotToken(e.target.value)}
+                      placeholder="8517026315:AAELCCiSvwQb..."
+                      className="w-full px-3.5 py-2 bg-slate-900 border border-slate-700/80 rounded-xl text-xs text-sky-300 font-mono placeholder-slate-500 focus:outline-none focus:border-sky-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-medium text-slate-300 mb-1 flex items-center gap-1.5">
+                      <KeyRound className="w-3.5 h-3.5 text-amber-400" />
+                      Telegram Admin ID (Whitelist):
+                    </label>
+                    <input
+                      type="text"
+                      value={adminId}
+                      onChange={(e) => setAdminId(e.target.value)}
+                      placeholder="6138197737"
+                      className="w-full px-3.5 py-2 bg-slate-900 border border-slate-700/80 rounded-xl text-xs text-amber-300 font-mono placeholder-slate-500 focus:outline-none focus:border-amber-500"
                     />
                   </div>
                 </div>

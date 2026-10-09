@@ -30,6 +30,7 @@ import {
   LogIn,
   Dna,
   Layers,
+  Languages,
 } from "lucide-react";
 import { VideoPlayer, VideoPlayerHandle } from "./components/VideoPlayer";
 import { SubtitleList } from "./components/SubtitleList";
@@ -59,6 +60,7 @@ import { VeoVideoModal } from "./components/VeoVideoModal";
 import { AIGenerateImageModal } from "./components/AIGenerateImageModal";
 import { AdminSystemDashboardModal } from "./components/AdminSystemDashboardModal";
 import { CrossPlatformToolkitModal } from "./components/CrossPlatformToolkitModal";
+import { ImageTextTranslatorModal } from "./components/ImageTextTranslatorModal";
 import { AuthModal } from "./components/AuthModal";
 import { ScienceStudioModal } from "./components/ScienceStudioModal";
 import { onAuthUserChanged, SavedProject } from "./services/firebase";
@@ -140,6 +142,7 @@ export const App: React.FC = () => {
   const [isAiImageModalOpen, setIsAiImageModalOpen] = useState(false);
   const [isAdminSystemModalOpen, setIsAdminSystemModalOpen] = useState(false);
   const [isCrossPlatformModalOpen, setIsCrossPlatformModalOpen] = useState(false);
+  const [isImageTextTranslatorModalOpen, setIsImageTextTranslatorModalOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [isScienceModalOpen, setIsScienceModalOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState<any>(() => {
@@ -798,6 +801,20 @@ export const App: React.FC = () => {
               <span>Ảnh Bìa AI</span>
             </button>
 
+            {/* Multimodal Image & Text OCR Translator */}
+            <button
+              id="btn-open-image-text-translator"
+              onClick={() => setIsImageTextTranslatorModalOpen(true)}
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-gradient-to-r from-cyan-600/30 to-blue-600/30 hover:from-cyan-600/50 hover:to-blue-600/50 text-cyan-300 border border-cyan-500/40 text-xs font-semibold transition-all shadow-xs"
+              title="Nhận diện & Dịch chữ trên hình ảnh, poster, văn bản sang Vietsub bằng Gemini Vision"
+            >
+              <Languages className="w-3.5 h-3.5 text-cyan-400" />
+              <span>Dịch Ảnh & Text</span>
+              <span className="hidden xl:inline-block text-[10px] font-bold px-1.5 py-0.2 rounded bg-cyan-500/30 text-cyan-200 border border-cyan-400/30 font-mono">
+                OCR
+              </span>
+            </button>
+
             {/* Admin System Dashboard */}
             <button
               id="btn-open-admin-dashboard"
@@ -1295,6 +1312,16 @@ export const App: React.FC = () => {
       <AIGenerateImageModal
         isOpen={isAiImageModalOpen}
         onClose={() => setIsAiImageModalOpen(false)}
+      />
+
+      {/* Multimodal Image & Text OCR Translator Modal */}
+      <ImageTextTranslatorModal
+        isOpen={isImageTextTranslatorModalOpen}
+        onClose={() => setIsImageTextTranslatorModalOpen(false)}
+        onAppendSubtitles={(newCues) => {
+          setCues((prev) => [...prev, ...newCues]);
+          showToast(`Đã thêm ${newCues.length} câu thoại dịch vào dự án!`, "success");
+        }}
       />
 
       {/* Admin System Telemetry & Maintenance Control Modal */}
