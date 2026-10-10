@@ -22,6 +22,7 @@ interface AuthModalProps {
     style: any;
   };
   onLoadProject: (proj: SavedProject) => void;
+  onOpenAdminPortal?: () => void;
 }
 
 export const AuthModal: React.FC<AuthModalProps> = ({
@@ -31,6 +32,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   onUserChanged,
   currentProject,
   onLoadProject,
+  onOpenAdminPortal,
 }) => {
   const [savedProjects, setSavedProjects] = useState<SavedProject[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -271,14 +273,30 @@ export const AuthModal: React.FC<AuthModalProps> = ({
         </div>
 
         {/* Footer */}
-        <div className="flex items-center justify-between px-6 py-4 border-t border-slate-800 bg-slate-900/90 text-xs text-slate-400">
+        <div className="flex flex-wrap items-center justify-between gap-3 px-6 py-4 border-t border-slate-800 bg-slate-900/90 text-xs text-slate-400">
           <span>Dữ liệu được mã hóa và bảo mật với Firebase Security Rules</span>
-          <button
-            onClick={onClose}
-            className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-medium transition"
-          >
-            Đóng
-          </button>
+          <div className="flex items-center gap-2">
+            {onOpenAdminPortal && (
+              <button
+                type="button"
+                onClick={() => {
+                  onClose();
+                  onOpenAdminPortal();
+                }}
+                className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-indigo-950/70 hover:bg-indigo-900 text-indigo-300 border border-indigo-700/50 text-xs font-semibold transition cursor-pointer"
+                title="Dành riêng cho Quản trị viên & Lập trình viên"
+              >
+                <Shield className="w-3.5 h-3.5 text-indigo-400" />
+                <span>Cổng Quản Trị & Dev</span>
+              </button>
+            )}
+            <button
+              onClick={onClose}
+              className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-medium transition cursor-pointer"
+            >
+              Đóng
+            </button>
+          </div>
         </div>
       </div>
     </div>

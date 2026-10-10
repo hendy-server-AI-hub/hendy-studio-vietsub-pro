@@ -25,7 +25,7 @@ import {
   SPEAKER_PERSONAS,
 } from "../utils/voiceoverEngine";
 
-interface SubtitleListProps {
+export interface SubtitleListProps {
   cues: SubtitleCue[];
   currentTime: number;
   onSelectCue: (time: number) => void;
@@ -40,6 +40,7 @@ interface SubtitleListProps {
   onOpenSmartMerge?: () => void;
   onDetectSpeakers?: () => void;
   isDetectingSpeakers?: boolean;
+  onUpdateCues?: (updatedCues: SubtitleCue[]) => void;
 }
 
 export const SubtitleList: React.FC<SubtitleListProps> = ({
@@ -57,6 +58,7 @@ export const SubtitleList: React.FC<SubtitleListProps> = ({
   onOpenSmartMerge,
   onDetectSpeakers,
   isDetectingSpeakers,
+  onUpdateCues,
 }) => {
   const platformInfo = useDeviceOptimization();
   const [searchQuery, setSearchQuery] = useState("");
@@ -151,6 +153,146 @@ export const SubtitleList: React.FC<SubtitleListProps> = ({
       c.textOriginal.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  // Detection for cues with overlapping text, extremely short durations (<0.8s), or overlapping timestamps
+  const detectionIssues = useMemo(() => {
+    const issues: Array<{
+      cueId: number;
+      cueIndex: number;
+      duration: number;
+      isExtremelyShort: boolean;
+      hasOverlappingTime: boolean;
+      overlapSeconds: number;
+      hasOverlappingText: boolean;
+      nextCueId?: number;
+    }> = [];
+
+    for (let i = 0; i < cues.length; i++) {
+      const cue = cues[i];
+      const duration = Math.max(0, cue.end - cue.start);
+      const isExtremelyShort = duration < 0.75;
+      const next = cues[i + 1];
+
+      let hasOverlappingTime = false;
+      let overlapSeconds = 0;
+      let hasOverlappingText = false;
+
+      if (next) {
+        if (cue.end > next.start + 0.05) {
+          hasOverlappingTime = true;
+          overlapSeconds = Number((cue.end - next.start).toFixed(2));
+        }
+        const t1 = cue.textVi.trim().toLowerCase();
+        const t2 = next.textVi.trim().toLowerCase();
+        if (t1 && t2) {
+          if (t1 === t2 || (t1.length >= 3 && (t2.startsWith(t1) || t1.endsWith(t2)))) {
+            hasOverlappingText = true;
+          }
+        }
+        const orig1 = cue.textOriginal?.trim().toLowerCase();
+        const orig2 = next.textOriginal?.trim().toLowerCase();
+        if (orig1 && orig2 && orig1 === orig2) {
+          hasOverlappingText = true;
+        }
+      }
+
+      if (isExtremelyShort || hasOverlappingTime || hasOverlappingText) {
+        issues.push({
+          cueId: cue.id,
+          cueIndex: i,
+          duration,
+          isExtremelyShort,
+          hasOverlappingTime,
+          overlapSeconds,
+          hasOverlappingText,
+          nextCueId: next?.id,
+        });
+      }
+    }
+
+    return issues;
+  }, [cues]);
+
+  // Merge and clean overlapping text and short cues to significantly improve readability
+  const handleAutoMergeAndCleanIssues = () => {
+    if (cues.length === 0) return;
+
+    const result: SubtitleCue[] = [];
+    let i = 0;
+
+    while (i < cues.length) {
+      let current = { ...cues[i] };
+      let j = i + 1;
+
+      while (j < cues.length) {
+        const next = cues[j];
+        const duration = current.end - current.start;
+        const isShort = duration < 0.8;
+        const overlapsTime = current.end > next.start;
+
+        const t1 = current.textVi.trim();
+        const t2 = next.textVi.trim();
+        const textMatches =
+          t1 &&
+          t2 &&
+          (t1.toLowerCase() === t2.toLowerCase() ||
+            t2.toLowerCase().startsWith(t1.toLowerCase()) ||
+            t1.toLowerCase().endsWith(t2.toLowerCase()));
+
+        if (isShort || overlapsTime || textMatches) {
+          let mergedVi = t1;
+          if (t1.toLowerCase() === t2.toLowerCase()) {
+            mergedVi = t1;
+          } else if (t2.toLowerCase().startsWith(t1.toLowerCase())) {
+            mergedVi = t2;
+          } else if (t1.toLowerCase().endsWith(t2.toLowerCase())) {
+            mergedVi = t1;
+          } else {
+            mergedVi = `${t1} ${t2}`;
+          }
+
+          let mergedOrig = [current.textOriginal?.trim(), next.textOriginal?.trim()]
+            .filter(Boolean)
+            .join(" ")
+            .trim();
+          if (
+            current.textOriginal &&
+            next.textOriginal &&
+            current.textOriginal.trim().toLowerCase() === next.textOriginal.trim().toLowerCase()
+          ) {
+            mergedOrig = current.textOriginal.trim();
+          }
+
+          const newEnd = Math.max(current.end, next.end);
+          current = {
+            ...current,
+            end: newEnd,
+            endTime: formatSecondsToSrtTime(newEnd).replace(",", "."),
+            textVi: mergedVi,
+            textOriginal: mergedOrig,
+          };
+          j++;
+        } else {
+          break;
+        }
+      }
+
+      result.push(current);
+      i = j;
+    }
+
+    // Ensure strictly chronological non-overlapping timestamps
+    for (let k = 0; k < result.length - 1; k++) {
+      if (result[k].end > result[k + 1].start) {
+        result[k].end = Math.max(result[k].start + 0.3, result[k + 1].start);
+        result[k].endTime = formatSecondsToSrtTime(result[k].end).replace(",", ".");
+      }
+    }
+
+    if (onUpdateCues) {
+      onUpdateCues(result);
+    }
+  };
+
   const handleTimeAdjust = (cue: SubtitleCue, field: "start" | "end", delta: number) => {
     const newStart = field === "start" ? Math.max(0, Number((cue.start + delta).toFixed(2))) : cue.start;
     const newEnd = field === "end" ? Math.max(newStart + 0.2, Number((cue.end + delta).toFixed(2))) : cue.end;
@@ -209,6 +351,19 @@ export const SubtitleList: React.FC<SubtitleListProps> = ({
               >
                 <GitMerge className="w-3.5 h-3.5 text-emerald-400" />
                 <span>Gộp SmartMerge</span>
+              </button>
+            )}
+
+            {/* Quick Auto Merge Short/Overlapping Subtitles */}
+            {detectionIssues.length > 0 && (
+              <button
+                id="btn-trigger-automerge-issues-top"
+                onClick={handleAutoMergeAndCleanIssues}
+                className="flex items-center gap-1 text-xs px-2.5 py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 font-semibold transition-all shadow-xs"
+                title="Tự động gộp phụ đề quá ngắn hoặc chồng lấn/trùng chữ"
+              >
+                <Sparkles className="w-3.5 h-3.5 text-amber-400 animate-pulse" />
+                <span>Gộp sub lỗi ({detectionIssues.length})</span>
               </button>
             )}
 
@@ -402,6 +557,44 @@ export const SubtitleList: React.FC<SubtitleListProps> = ({
         </div>
       )}
 
+      {/* Auto-Detection & Readability Optimization Banner */}
+      {detectionIssues.length > 0 && (
+        <div
+          id="automerge-issues-banner"
+          className="mx-3 my-2 sm:mx-4 p-2.5 rounded-xl bg-gradient-to-r from-amber-950/80 via-slate-900 to-amber-950/80 border border-amber-500/50 text-xs text-amber-200 flex flex-wrap items-center justify-between gap-2 shadow-lg"
+        >
+          <div className="flex items-center gap-2">
+            <div className="p-1.5 rounded-lg bg-amber-500/20 text-amber-400 shrink-0">
+              <Sparkles className="w-4 h-4 animate-pulse" />
+            </div>
+            <div>
+              <div className="font-semibold text-white flex items-center gap-1.5">
+                <span>Phát hiện {detectionIssues.length} câu phụ đề cần tối ưu độ đọc</span>
+                <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                  Khuyến nghị gộp
+                </span>
+              </div>
+              <div className="text-[11px] text-amber-300/80">
+                Gồm {detectionIssues.filter((i) => i.isExtremelyShort).length} câu quá ngắn (&lt;0.75s),{" "}
+                {detectionIssues.filter((i) => i.hasOverlappingTime).length} câu chồng lấn mốc thời gian,{" "}
+                {detectionIssues.filter((i) => i.hasOverlappingText).length} câu trùng văn bản.
+              </div>
+            </div>
+          </div>
+
+          <button
+            id="btn-trigger-automerge-issues"
+            type="button"
+            onClick={handleAutoMergeAndCleanIssues}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 font-bold text-xs shadow-md active:scale-95 transition-all shrink-0 cursor-pointer"
+            title="Tự động gộp câu ngắn vào câu kế cận và sửa mốc thời gian chồng chéo để tối ưu độ đọc"
+          >
+            <GitMerge className="w-3.5 h-3.5" />
+            <span>Tự động gộp & Sửa lỗi ({detectionIssues.length})</span>
+          </button>
+        </div>
+      )}
+
       {/* Subtitles Scrollable Area */}
       <div
         ref={scrollContainerRef}
@@ -424,6 +617,7 @@ export const SubtitleList: React.FC<SubtitleListProps> = ({
             const singleSelectedIdx = singleSelectedId !== null ? cues.findIndex((c) => c.id === singleSelectedId) : -1;
             const isNeighborOfSelected =
               singleSelectedIdx !== -1 && Math.abs(cueIndexInAll - singleSelectedIdx) === 1;
+            const cueIssue = detectionIssues.find((issue) => issue.cueId === cue.id);
 
             return (
               <div
@@ -499,6 +693,36 @@ export const SubtitleList: React.FC<SubtitleListProps> = ({
                       <span className="hidden sm:inline-block text-[10px] text-emerald-400 bg-emerald-950/60 px-1.5 py-0.2 rounded border border-emerald-500/30">
                         Liền kề
                       </span>
+                    )}
+
+                    {/* Problematic Cue Issue Badges */}
+                    {cueIssue && (
+                      <div className="flex items-center gap-1">
+                        {cueIssue.isExtremelyShort && (
+                          <span
+                            className="text-[9px] bg-rose-500/20 text-rose-300 border border-rose-500/30 px-1 py-0.2 rounded font-medium"
+                            title="Thời lượng quá ngắn (<0.75s) gây khó đọc"
+                          >
+                            Ngắn ({cueIssue.duration.toFixed(1)}s)
+                          </span>
+                        )}
+                        {cueIssue.hasOverlappingTime && (
+                          <span
+                            className="text-[9px] bg-amber-500/20 text-amber-300 border border-amber-500/30 px-1 py-0.2 rounded font-medium"
+                            title="Thời gian chồng lấn với câu sau"
+                          >
+                            Chồng lấn (+{cueIssue.overlapSeconds}s)
+                          </span>
+                        )}
+                        {cueIssue.hasOverlappingText && (
+                          <span
+                            className="text-[9px] bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 px-1 py-0.2 rounded font-medium"
+                            title="Trùng lặp hoặc lặp câu chữ"
+                          >
+                            Trùng chữ
+                          </span>
+                        )}
+                      </div>
                     )}
                   </div>
 

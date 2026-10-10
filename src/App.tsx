@@ -31,38 +31,50 @@ import {
   Dna,
   Layers,
   Languages,
+  ArrowLeft,
+  Menu,
+  X,
+  ChevronRight,
+  Share2,
+  ShieldCheck,
+  Code2,
 } from "lucide-react";
 import { VideoPlayer, VideoPlayerHandle } from "./components/VideoPlayer";
 import { SubtitleList } from "./components/SubtitleList";
-import { AIGenerateModal } from "./components/AIGenerateModal";
-import { AIRefineModal } from "./components/AIRefineModal";
-import { SubtitleStylingModal } from "./components/SubtitleStylingModal";
-import { ExportModal } from "./components/ExportModal";
-import { SampleVideosModal } from "./components/SampleVideosModal";
-import { AICoverModal } from "./components/AICoverModal";
 import { AudioWaveformTimeline } from "./components/AudioWaveformTimeline";
-import { CapCutEditorModal } from "./components/CapCutEditorModal";
-import { WebDramaImportModal } from "./components/WebDramaImportModal";
-import { UniversalLinkTranslatorModal } from "./components/UniversalLinkTranslatorModal";
-import { BookmarkletStudioModal } from "./components/BookmarkletStudioModal";
-import { CloudflareDeploymentModal } from "./components/CloudflareDeploymentModal";
-import { KeyboardShortcutsModal } from "./components/KeyboardShortcutsModal";
 import { CompactShortcutsDock } from "./components/CompactShortcutsDock";
-import { AutoVoiceoverModal } from "./components/AutoVoiceoverModal";
-import { ExtensionsAndAppsHubModal } from "./components/ExtensionsAndAppsHubModal";
-import { FullScreenCinemaMode } from "./components/FullScreenCinemaMode";
-import { MaintenanceSandboxDashboard } from "./components/MaintenanceSandboxDashboard";
-import { SmartMergeModal } from "./components/SmartMergeModal";
-import { TelegramBotModal } from "./components/TelegramBotModal";
-import { AppDownloadModal } from "./components/AppDownloadModal";
-import { GeminiChatbotModal } from "./components/GeminiChatbotModal";
-import { VeoVideoModal } from "./components/VeoVideoModal";
-import { AIGenerateImageModal } from "./components/AIGenerateImageModal";
-import { AdminSystemDashboardModal } from "./components/AdminSystemDashboardModal";
-import { CrossPlatformToolkitModal } from "./components/CrossPlatformToolkitModal";
-import { ImageTextTranslatorModal } from "./components/ImageTextTranslatorModal";
-import { AuthModal } from "./components/AuthModal";
-import { ScienceStudioModal } from "./components/ScienceStudioModal";
+import { StudioHomePage } from "./components/StudioHomePage";
+
+// Dynamic Imports with React.lazy for heavy modals to drastically optimize bundle size
+const AdminDeveloperPortal = React.lazy(() => import("./components/AdminDeveloperPortal").then((m) => ({ default: m.AdminDeveloperPortal })));
+const SocialVideoImportModal = React.lazy(() => import("./components/SocialVideoImportModal").then((m) => ({ default: m.SocialVideoImportModal })));
+const AIGenerateModal = React.lazy(() => import("./components/AIGenerateModal").then((m) => ({ default: m.AIGenerateModal })));
+const AIRefineModal = React.lazy(() => import("./components/AIRefineModal").then((m) => ({ default: m.AIRefineModal })));
+const SubtitleStylingModal = React.lazy(() => import("./components/SubtitleStylingModal").then((m) => ({ default: m.SubtitleStylingModal })));
+const ExportModal = React.lazy(() => import("./components/ExportModal").then((m) => ({ default: m.ExportModal })));
+const SampleVideosModal = React.lazy(() => import("./components/SampleVideosModal").then((m) => ({ default: m.SampleVideosModal })));
+const AICoverModal = React.lazy(() => import("./components/AICoverModal").then((m) => ({ default: m.AICoverModal })));
+const CapCutEditorModal = React.lazy(() => import("./components/CapCutEditorModal").then((m) => ({ default: m.CapCutEditorModal })));
+const WebDramaImportModal = React.lazy(() => import("./components/WebDramaImportModal").then((m) => ({ default: m.WebDramaImportModal })));
+const UniversalLinkTranslatorModal = React.lazy(() => import("./components/UniversalLinkTranslatorModal").then((m) => ({ default: m.UniversalLinkTranslatorModal })));
+const BookmarkletStudioModal = React.lazy(() => import("./components/BookmarkletStudioModal").then((m) => ({ default: m.BookmarkletStudioModal })));
+const CloudflareDeploymentModal = React.lazy(() => import("./components/CloudflareDeploymentModal").then((m) => ({ default: m.CloudflareDeploymentModal })));
+const KeyboardShortcutsModal = React.lazy(() => import("./components/KeyboardShortcutsModal").then((m) => ({ default: m.KeyboardShortcutsModal })));
+const AutoVoiceoverModal = React.lazy(() => import("./components/AutoVoiceoverModal").then((m) => ({ default: m.AutoVoiceoverModal })));
+const ExtensionsAndAppsHubModal = React.lazy(() => import("./components/ExtensionsAndAppsHubModal").then((m) => ({ default: m.ExtensionsAndAppsHubModal })));
+const FullScreenCinemaMode = React.lazy(() => import("./components/FullScreenCinemaMode").then((m) => ({ default: m.FullScreenCinemaMode })));
+const MaintenanceSandboxDashboard = React.lazy(() => import("./components/MaintenanceSandboxDashboard").then((m) => ({ default: m.MaintenanceSandboxDashboard })));
+const SmartMergeModal = React.lazy(() => import("./components/SmartMergeModal").then((m) => ({ default: m.SmartMergeModal })));
+const TelegramBotModal = React.lazy(() => import("./components/TelegramBotModal").then((m) => ({ default: m.TelegramBotModal })));
+const AppDownloadModal = React.lazy(() => import("./components/AppDownloadModal").then((m) => ({ default: m.AppDownloadModal })));
+const GeminiChatbotModal = React.lazy(() => import("./components/GeminiChatbotModal").then((m) => ({ default: m.GeminiChatbotModal })));
+const VeoVideoModal = React.lazy(() => import("./components/VeoVideoModal").then((m) => ({ default: m.VeoVideoModal })));
+const AIGenerateImageModal = React.lazy(() => import("./components/AIGenerateImageModal").then((m) => ({ default: m.AIGenerateImageModal })));
+const AdminSystemDashboardModal = React.lazy(() => import("./components/AdminSystemDashboardModal").then((m) => ({ default: m.AdminSystemDashboardModal })));
+const CrossPlatformToolkitModal = React.lazy(() => import("./components/CrossPlatformToolkitModal").then((m) => ({ default: m.CrossPlatformToolkitModal })));
+const ImageTextTranslatorModal = React.lazy(() => import("./components/ImageTextTranslatorModal").then((m) => ({ default: m.ImageTextTranslatorModal })));
+const AuthModal = React.lazy(() => import("./components/AuthModal").then((m) => ({ default: m.AuthModal })));
+const ScienceStudioModal = React.lazy(() => import("./components/ScienceStudioModal").then((m) => ({ default: m.ScienceStudioModal })));
 import { onAuthUserChanged, SavedProject } from "./services/firebase";
 import { SAMPLE_VIDEOS } from "./data/sampleVideos";
 import {
@@ -145,6 +157,7 @@ export const App: React.FC = () => {
   const [isImageTextTranslatorModalOpen, setIsImageTextTranslatorModalOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [isScienceModalOpen, setIsScienceModalOpen] = useState(false);
+  const [isSocialImportModalOpen, setIsSocialImportModalOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState<any>(() => {
     try {
       const saved = localStorage.getItem("vietsub_studio_user");
@@ -169,6 +182,22 @@ export const App: React.FC = () => {
     }
     return false;
   });
+
+  const [currentView, setCurrentView] = useState<"home" | "studio" | "admin_portal">(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get("view") === "admin" || params.get("view") === "admin_portal" || params.get("role") === "dev") {
+        return "admin_portal";
+      }
+      if (params.get("view") === "studio" || params.get("app") === "editor") {
+        return "studio";
+      }
+    }
+    return "home";
+  });
+
+  // Vertical Tools Drawer state: always hidden by default, only shown when clicked
+  const [isVerticalDrawerOpen, setIsVerticalDrawerOpen] = useState(false);
 
   // Auto Voiceover & Multi-Voice Persona Configuration
   const [voiceoverConfig, setVoiceoverConfig] = useState<VoiceoverConfig>({
@@ -506,6 +535,125 @@ export const App: React.FC = () => {
     );
   }
 
+  // Dedicated Admin & Senior Developer Console (Hoàn toàn tách biệt khỏi trang chủ và user interface)
+  if (currentView === "admin_portal") {
+    return (
+      <React.Suspense
+        fallback={
+          <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center text-indigo-400 font-mono gap-3">
+            <div className="w-8 h-8 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin" />
+            <span>Đang nạp Cổng Quản Trị & Lập Trình Viên Chuyên Dụng...</span>
+          </div>
+        }
+      >
+        <AdminDeveloperPortal
+          onBackToStudio={() => setCurrentView("studio")}
+          onBackToHome={() => setCurrentView("home")}
+          currentUser={currentUser}
+          onNotify={showToast}
+        />
+      </React.Suspense>
+    );
+  }
+
+  // High-Quality Standard Homepage View
+  if (currentView === "home") {
+    return (
+      <React.Suspense fallback={<div className="min-h-screen bg-slate-950 flex items-center justify-center text-slate-400">Đang tải Vietsub Studio...</div>}>
+        <StudioHomePage
+          onEnterStudio={() => setCurrentView("studio")}
+          onOpenTranslator={() => {
+            setCurrentView("studio");
+            setIsUniversalTranslatorModalOpen(true);
+          }}
+          onOpenSocialImport={() => setIsSocialImportModalOpen(true)}
+          onOpenVoiceover={() => {
+            setCurrentView("studio");
+            setIsAutoVoiceoverModalOpen(true);
+          }}
+          onOpenCapCut={() => {
+            setCurrentView("studio");
+            setIsCapCutModalOpen(true);
+          }}
+          onOpenBookmarklet={() => {
+            setCurrentView("studio");
+            setIsBookmarkletModalOpen(true);
+          }}
+          onOpenDownload={() => {
+            setIsAppDownloadModalOpen(true);
+          }}
+          onOpenSampleVideos={() => {
+            setCurrentView("studio");
+            setIsSampleModalOpen(true);
+          }}
+          onOpenImageTranslator={() => {
+            setCurrentView("studio");
+            setIsImageTextTranslatorModalOpen(true);
+          }}
+          onOpenAuth={() => setIsAuthModalOpen(true)}
+          onOpenAdminPortal={() => setCurrentView("admin_portal")}
+          platformInfo={platformInfo}
+          currentUser={currentUser}
+        />
+
+        {/* Basic Modals that can be opened directly from the Homepage */}
+        {isAppDownloadModalOpen && (
+          <AppDownloadModal
+            isOpen={isAppDownloadModalOpen}
+            onClose={() => setIsAppDownloadModalOpen(false)}
+          />
+        )}
+
+        {isSocialImportModalOpen && (
+          <SocialVideoImportModal
+            isOpen={isSocialImportModalOpen}
+            onClose={() => setIsSocialImportModalOpen(false)}
+            onImportSuccess={(result) => {
+              setVideoUrl(result.videoUrl);
+              setVideoTitle(result.title);
+              if (result.initialCues && result.initialCues.length > 0) {
+                setCues(result.initialCues);
+              }
+              setCurrentView("studio");
+              showToast(`Đã nhập thành công video từ ${result.platform?.toUpperCase() || "mạng xã hội"}!`, "success");
+              if (result.autoStartTranslate) {
+                setTimeout(() => setIsGenerateModalOpen(true), 350);
+              }
+            }}
+            onNotify={showToast}
+          />
+        )}
+
+        {isAuthModalOpen && (
+          <AuthModal
+            isOpen={isAuthModalOpen}
+            onClose={() => setIsAuthModalOpen(false)}
+            currentUser={currentUser}
+            onUserChanged={(user) => {
+              setCurrentUser(user);
+              showToast(user ? `Chào mừng ${user.displayName || "bạn"}!` : "Đã đăng xuất.", "info");
+            }}
+            currentProject={{
+              title: videoTitle,
+              videoUrl,
+              cues,
+              style: subtitleStyle,
+            }}
+            onLoadProject={(proj: SavedProject) => {
+              setVideoTitle(proj.title);
+              setVideoUrl(proj.videoUrl);
+              if (proj.cues) setCues(proj.cues);
+              if (proj.style) setSubtitleStyle(proj.style);
+              setCurrentView("studio");
+              showToast(`Đã mở dự án "${proj.title}" từ Cloud!`, "success");
+            }}
+            onOpenAdminPortal={() => setCurrentView("admin_portal")}
+          />
+        )}
+      </React.Suspense>
+    );
+  }
+
   return (
     <div
       id="app-root-container"
@@ -529,344 +677,543 @@ export const App: React.FC = () => {
         className="hidden"
       />
 
-      {/* Top Navigation Bar */}
-      <header className="border-b border-slate-800 bg-slate-950/80 backdrop-blur-md sticky top-0 z-40 px-4 sm:px-6 py-3">
-        <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
-          {/* Brand Logo & Name */}
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-rose-600 via-rose-500 to-amber-500 flex items-center justify-center text-white shadow-lg shadow-rose-600/30">
-              <Film className="w-5 h-5" />
+      {/* Top Navigation Bar with HORIZONTAL SCROLLING to prevent squashing or overflowing */}
+      <header className="border-b border-slate-800 bg-slate-950/95 backdrop-blur-md sticky top-0 z-40 px-3 sm:px-6 py-2.5">
+        <div className="max-w-7xl mx-auto flex items-center justify-between gap-3 w-full">
+          {/* Brand Logo & Back to Home Button */}
+          <div className="flex items-center gap-2.5 shrink-0">
+            <button
+              id="btn-back-to-home"
+              onClick={() => setCurrentView("home")}
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-800 text-xs font-semibold shrink-0 whitespace-nowrap transition active:scale-95 shadow-xs cursor-pointer"
+              title="Quay lại Trang Chủ cơ bản"
+            >
+              <ArrowLeft className="w-3.5 h-3.5 text-rose-400 shrink-0" />
+              <span className="hidden sm:inline">Trang chủ</span>
+            </button>
+
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-rose-600 via-rose-500 to-amber-500 flex items-center justify-center text-white shadow-lg shadow-rose-600/30 shrink-0">
+              <Film className="w-4 h-4 shrink-0" />
             </div>
-            <div>
+            <div className="hidden xl:block shrink-0 whitespace-nowrap">
               <div className="flex items-center gap-2">
-                <h1 className="text-base sm:text-lg font-extrabold tracking-tight bg-gradient-to-r from-white via-slate-100 to-slate-300 bg-clip-text text-transparent">
+                <h1 className="text-sm sm:text-base font-extrabold tracking-tight bg-gradient-to-r from-white via-slate-100 to-slate-300 bg-clip-text text-transparent">
                   Vietsub Video Studio
                 </h1>
-                <span className="hidden sm:inline-block text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-400 border border-rose-500/30">
-                  AI Powered
+                <span className="text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.2 rounded-full bg-rose-500/20 text-rose-400 border border-rose-500/30">
+                  Pro
                 </span>
               </div>
-              <p className="text-xs text-slate-400 hidden sm:block">
-                Tạo phụ đề tiếng Việt tự động cho video với độ chính xác cao
-              </p>
             </div>
           </div>
 
-          {/* Action Toolbar */}
-          <div className="flex items-center gap-2 sm:gap-2.5">
-            {/* Pick Sample Video */}
-            <button
-              id="btn-open-sample-modal"
-              onClick={() => setIsSampleModalOpen(true)}
-              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-xs font-medium text-slate-300 hover:text-white transition-all shadow-xs"
-              title="Chọn video mẫu để thử nghiệm nhanh"
-            >
-              <Video className="w-3.5 h-3.5 text-amber-400" />
-              <span className="hidden md:inline">Video mẫu</span>
-            </button>
-
+          {/* Smooth Horizontal Scrolling Toolbar for Vietsub Actions (shrink-0, whitespace-nowrap, no squashing or overflow) */}
+          <div className="flex-1 flex items-center justify-end gap-2 overflow-x-auto no-scrollbar scroll-smooth min-w-0 py-0.5">
             {/* Upload Video Button */}
             <button
               id="btn-upload-video-file"
               onClick={() => fileInputRef.current?.click()}
-              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-xs font-medium text-slate-300 hover:text-white transition-all shadow-xs"
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-xs font-medium text-slate-300 hover:text-white transition shadow-xs cursor-pointer shrink-0 whitespace-nowrap"
               title="Tải video của bạn từ máy tính (MP4, WebM, MOV)"
             >
-              <Upload className="w-3.5 h-3.5 text-rose-400" />
-              <span>Tải video lên</span>
+              <Upload className="w-3.5 h-3.5 text-rose-400 shrink-0" />
+              <span>Tải video</span>
             </button>
 
-            {/* Import SRT */}
+            {/* Import SRT Button */}
             <button
-              id="btn-import-srt"
+              id="btn-import-srt-header"
               onClick={() => srtInputRef.current?.click()}
-              className="hidden lg:flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-xs font-medium text-slate-300 hover:text-white transition-all shadow-xs"
-              title="Nhập phụ đề có sẵn (.SRT, .VTT)"
+              className="hidden sm:flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-xs font-medium text-slate-300 hover:text-white transition shadow-xs cursor-pointer shrink-0 whitespace-nowrap"
+              title="Nhập file phụ đề .SRT hoặc .VTT"
             >
-              <FileText className="w-3.5 h-3.5 text-slate-400" />
-              <span>Nhập .SRT</span>
+              <FileText className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+              <span>Nhập SRT</span>
             </button>
 
-            {/* Keyboard Shortcuts Guide Button */}
+            {/* Nhập TikTok / FB Reels Button */}
             <button
-              id="btn-open-shortcuts-modal"
-              onClick={() => setIsShortcutsModalOpen(true)}
-              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-xs font-medium text-slate-300 hover:text-white transition-all shadow-xs"
-              title="Tra cứu phím tắt chỉnh sửa phụ đề & tua video (Nhấn ?)"
+              id="btn-import-social-header"
+              onClick={() => setIsSocialImportModalOpen(true)}
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-pink-950/40 hover:bg-pink-900/50 text-pink-300 border border-pink-700/40 font-semibold text-xs transition shadow-xs cursor-pointer shrink-0 whitespace-nowrap"
+              title="Nhập video trực tiếp từ TikTok, Douyin, Facebook Reels, YouTube Shorts"
             >
-              <Keyboard className="w-3.5 h-3.5 text-indigo-400" />
-              <span className="hidden xl:inline">Phím tắt</span>
-              <kbd className="hidden sm:inline-block text-[10px] font-mono px-1 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
-                ?
-              </kbd>
-            </button>
-
-            {/* Dịch Trực Tiếp Mọi Link, Web & App */}
-            <button
-              id="btn-open-universal-translator-modal"
-              onClick={() => setIsUniversalTranslatorModalOpen(true)}
-              className="flex items-center gap-1.5 px-3 sm:px-3.5 py-2 rounded-xl bg-gradient-to-r from-pink-600/30 via-rose-600/30 to-indigo-600/30 hover:from-pink-600/50 hover:to-indigo-600/50 text-pink-300 border border-pink-500/40 font-semibold text-xs transition-all shadow-xs"
-              title="Dịch trực tiếp trên tất cả Link, Web hoặc App (YouTube, TikTok, AV01, Reels, Màn hình...)"
-            >
-              <Globe className="w-3.5 h-3.5 text-pink-400" />
-              <span>Dịch Mọi Link / Web / App</span>
-              <span className="hidden sm:inline-block text-[10px] font-bold px-1.5 py-0.2 rounded bg-pink-500/30 text-pink-200 border border-pink-400/30">
-                Universal
-              </span>
-            </button>
-
-            {/* Bookmarklet 1-Click Extension Tool Button */}
-            <button
-              id="btn-open-bookmarklet-modal"
-              onClick={() => setIsBookmarkletModalOpen(true)}
-              className="flex items-center gap-1.5 px-3 sm:px-3.5 py-2 rounded-xl bg-gradient-to-r from-amber-600/30 via-orange-600/30 to-rose-600/30 hover:from-amber-600/50 hover:to-orange-600/50 text-amber-300 border border-amber-500/40 font-semibold text-xs transition-all shadow-xs"
-              title="Tiện ích Bookmarklet 1-Click: Dịch phụ đề & Thuyết minh trên bất kỳ website nào"
-            >
-              <Bookmark className="w-3.5 h-3.5 text-amber-400 fill-current" />
-              <span>Tiện Ích Bookmarklet</span>
-              <span className="hidden sm:inline-block text-[10px] font-bold px-1.5 py-0.2 rounded bg-amber-500/30 text-amber-200 border border-amber-400/30">
-                1-Click
-              </span>
-            </button>
-
-            {/* CapCut & Audio Pro Button */}
-            <button
-              id="btn-open-capcut-modal"
-              onClick={() => setIsCapCutModalOpen(true)}
-              className="flex items-center gap-1.5 px-3 sm:px-3.5 py-2 rounded-xl bg-gradient-to-r from-purple-600/30 to-indigo-600/30 hover:from-purple-600/50 hover:to-indigo-600/50 text-purple-300 border border-purple-500/40 font-semibold text-xs transition-all shadow-xs"
-              title="Mẫu chữ CapCut thịnh hành, Safe Zone và bộ công cụ chỉnh âm thanh"
-            >
-              <Zap className="w-3.5 h-3.5 text-purple-400 fill-current" />
-              <span>CapCut & Audio</span>
-              <span className="hidden sm:inline-block text-[10px] font-bold px-1.5 py-0.2 rounded bg-purple-500/30 text-purple-200 border border-purple-400/30">
-                Pro
-              </span>
-            </button>
-
-            {/* Voiceover Casting Modal Button (Nam / Nu / Gia / Tre) */}
-            <button
-              id="btn-open-voiceover-modal-header"
-              onClick={() => setIsAutoVoiceoverModalOpen(true)}
-              className="flex items-center gap-1.5 px-3 sm:px-3.5 py-2 rounded-xl bg-gradient-to-r from-rose-950/80 via-purple-950/80 to-slate-900 hover:from-rose-900 hover:to-purple-900 text-rose-300 border border-rose-500/40 font-semibold text-xs transition-all shadow-xs"
-              title="Tự động nhận diện giọng nói Nam/Nữ/Già/Trẻ để thuyết minh phụ đề tiếng Việt"
-            >
-              <Users className="w-3.5 h-3.5 text-rose-400" />
-              <span>Thuyết Minh AI</span>
-              <span className="hidden sm:inline-block text-[10px] font-bold px-1.5 py-0.2 rounded bg-rose-500/30 text-rose-200 border border-rose-400/30">
-                Nam/Nữ/Già/Trẻ
-              </span>
+              <Share2 className="w-3.5 h-3.5 text-pink-400 shrink-0" />
+              <span>Nhập TikTok / FB</span>
             </button>
 
             {/* Primary Generate Vietsub with AI */}
             <button
               id="btn-open-ai-generate-modal"
               onClick={() => setIsGenerateModalOpen(true)}
-              className="flex items-center gap-2 px-3.5 sm:px-4 py-2 rounded-xl bg-gradient-to-r from-rose-600 via-rose-500 to-amber-500 hover:from-rose-500 hover:to-amber-400 text-white font-bold text-xs sm:text-sm shadow-lg shadow-rose-600/25 active:scale-95 transition-all"
+              className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-2 rounded-xl bg-gradient-to-r from-rose-600 via-rose-500 to-amber-500 hover:from-rose-500 hover:to-amber-400 text-white font-bold text-xs shadow-lg shadow-rose-600/25 active:scale-95 transition-all cursor-pointer shrink-0 whitespace-nowrap"
+              title="Tự động tạo phụ đề Vietsub bằng AI"
             >
-              <Sparkles className="w-4 h-4 animate-pulse" />
+              <Sparkles className="w-3.5 h-3.5 shrink-0 animate-pulse" />
               <span>Tạo Vietsub AI</span>
             </button>
 
-            {/* AI Song Cover Button */}
+            {/* AI Refine Subtitles Button */}
             <button
-              id="btn-open-ai-cover-modal"
-              onClick={() => setIsCoverModalOpen(true)}
-              className="flex items-center gap-1.5 px-3 sm:px-3.5 py-2 rounded-xl bg-gradient-to-r from-purple-600/30 to-indigo-600/30 hover:from-purple-600/50 hover:to-indigo-600/50 text-purple-300 border border-purple-500/40 font-semibold text-xs transition-all shadow-xs"
-              title="Cover lại bài hát bằng các giọng ca sĩ AI nổi tiếng: Sơn Tùng M-TP, Diva Ballad, Vũ..."
+              id="btn-open-refine-modal"
+              onClick={() => setIsRefineModalOpen(true)}
+              className="hidden md:flex items-center gap-1.5 px-3 py-2 rounded-xl bg-indigo-950/40 hover:bg-indigo-900/50 text-indigo-300 border border-indigo-700/40 font-semibold text-xs transition shadow-xs cursor-pointer shrink-0 whitespace-nowrap"
+              title="AI trau chuốt & tối ưu hóa câu chữ Vietsub"
             >
-              <Mic className="w-3.5 h-3.5 text-purple-400" />
-              <span>Cover Bài Hát AI</span>
-              <span className="hidden sm:inline-block text-[10px] font-bold px-1.5 py-0.2 rounded bg-purple-500/30 text-purple-200 border border-purple-400/30">
-                Hot
-              </span>
+              <Sparkles className="w-3.5 h-3.5 text-indigo-400 shrink-0" />
+              <span>AI Tối Ưu</span>
             </button>
 
-            {/* Cloudflare Workers AI & dash.cloudflare.com Deployment */}
+            {/* Style Subtitles Button */}
             <button
-              id="btn-open-cloudflare-modal"
-              onClick={() => setIsCloudflareModalOpen(true)}
-              className="flex items-center gap-1.5 px-3 sm:px-3.5 py-2 rounded-xl bg-gradient-to-r from-orange-600/30 via-amber-600/30 to-rose-600/30 hover:from-orange-600/50 hover:to-amber-600/50 text-orange-300 border border-orange-500/40 font-semibold text-xs transition-all shadow-xs"
-              title="Cloudflare Workers AI (Whisper, TTS) & Triển khai lên dash.cloudflare.com"
+              id="btn-open-style-modal"
+              onClick={() => setIsStyleModalOpen(true)}
+              className="hidden sm:flex items-center gap-1.5 px-3 py-2 rounded-xl bg-amber-950/40 hover:bg-amber-900/50 text-amber-300 border border-amber-700/40 font-semibold text-xs transition shadow-xs cursor-pointer shrink-0 whitespace-nowrap"
+              title="Tùy chỉnh kiểu hiển thị phụ đề"
             >
-              <Cloud className="w-3.5 h-3.5 text-orange-400" />
-              <span className="hidden sm:inline">Cloudflare</span>
-              <span className="hidden md:inline">AI</span>
-              <span className="text-[10px] font-bold px-1.5 py-0.2 rounded bg-orange-500/30 text-orange-200 border border-orange-400/30">
-                Deploy
-              </span>
+              <Sliders className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+              <span>Kiểu Sub</span>
             </button>
 
-            {/* Optimized Full-Screen Cinema Mode Button */}
+            {/* Voiceover Button */}
             <button
-              id="btn-open-cinema-fullscreen"
-              onClick={() => setIsCinemaModeOpen(true)}
-              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-rose-300 border border-rose-500/40 text-xs font-semibold transition-all shadow-xs"
-              title="Giao diện xem phim toàn màn hình tối ưu (Full-Screen Cinema)"
+              id="btn-open-voiceover-header"
+              onClick={() => setIsAutoVoiceoverModalOpen(true)}
+              className="hidden lg:flex items-center gap-1.5 px-3 py-2 rounded-xl bg-purple-950/40 hover:bg-purple-900/50 text-purple-300 border border-purple-700/40 font-semibold text-xs transition shadow-xs cursor-pointer shrink-0 whitespace-nowrap"
+              title="Thuyết minh AI đa giọng phân vai"
             >
-              <Maximize2 className="w-3.5 h-3.5 text-rose-400" />
-              <span className="hidden xl:inline">Rạp Chiếu</span>
-            </button>
-
-            {/* Extensions & Native Apps Hub Button */}
-            <button
-              id="btn-open-apps-hub"
-              onClick={() => setIsAppsHubModalOpen(true)}
-              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-indigo-300 border border-indigo-500/40 text-xs font-semibold transition-all shadow-xs"
-              title="Trung tâm tiện ích Chrome Web Store, APK Android và App Native"
-            >
-              <Smartphone className="w-3.5 h-3.5 text-indigo-400" />
-              <span className="hidden xl:inline">Chrome & APKs</span>
-            </button>
-
-            {/* Tải App Đa Nền Tảng & Releases */}
-            <button
-              id="btn-open-app-download"
-              onClick={() => setIsAppDownloadModalOpen(true)}
-              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-gradient-to-r from-sky-600/30 to-indigo-600/30 hover:from-sky-600/50 hover:to-indigo-600/50 text-sky-300 border border-sky-500/40 text-xs font-semibold transition-all shadow-xs"
-              title="Tải App cho Android (.apk), iOS, Windows (.exe), Mac (.dmg) - Tự động nhận diện OS"
-            >
-              <Download className="w-3.5 h-3.5 text-sky-400" />
-              <span>Tải App ({platformInfo.os.toUpperCase()})</span>
-              <span className="hidden lg:inline-block text-[10px] font-bold px-1.5 py-0.2 rounded bg-sky-500/30 text-sky-200 border border-sky-400/30">
-                Direct
-              </span>
-            </button>
-
-            {/* Cross-Platform Toolkit & UI Builder (Flutter / React Native / XML / Compose) */}
-            <button
-              id="btn-open-cross-platform-toolkit"
-              onClick={() => setIsCrossPlatformModalOpen(true)}
-              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-gradient-to-r from-indigo-600/30 via-purple-600/30 to-pink-600/30 hover:from-indigo-600/50 hover:to-purple-600/50 text-indigo-300 border border-indigo-500/40 text-xs font-semibold transition-all shadow-xs"
-              title="Bộ công cụ Cross-Platform: Flutter, React Native, Jetpack Compose, Android XML & Build Compiler"
-            >
-              <Layers className="w-3.5 h-3.5 text-indigo-400" />
-              <span className="hidden sm:inline">UI Studio</span>
-              <span className="text-[10px] font-bold px-1.5 py-0.2 rounded bg-indigo-500/30 text-indigo-200 border border-indigo-400/30">
-                Flutter/RN/XML
-              </span>
-            </button>
-
-            {/* Telegram Bot & Mini App Simulator */}
-            <button
-              id="btn-open-telegram-bot"
-              onClick={() => setIsTelegramBotModalOpen(true)}
-              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[#24A1DE]/20 hover:bg-[#24A1DE]/40 text-[#24A1DE] border border-[#24A1DE]/40 text-xs font-semibold transition-all shadow-xs"
-              title="Mở giao diện Telegram Bot & TMA Webhook"
-            >
-              <Smartphone className="w-3.5 h-3.5 text-[#24A1DE]" />
-              <span>Telegram Bot</span>
-            </button>
-
-            {/* Gemini AI Chatbot Co-Pilot */}
-            <button
-              id="btn-open-gemini-chatbot"
-              onClick={() => setIsGeminiChatbotModalOpen(true)}
-              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-purple-600/30 hover:bg-purple-600/50 text-purple-300 border border-purple-500/40 text-xs font-semibold transition-all shadow-xs"
-              title="Trợ lý Gemini AI hỗ trợ kịch bản, dịch phim & High Thinking Mode"
-            >
-              <Bot className="w-3.5 h-3.5 text-purple-400" />
-              <span>Chat AI Co-Pilot</span>
-            </button>
-
-            {/* SmartMergeEngine Button */}
-            <button
-              id="btn-open-smart-merge"
-              onClick={() => setIsSmartMergeModalOpen(true)}
-              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-emerald-600/30 hover:bg-emerald-600/50 text-emerald-300 border border-emerald-500/40 text-xs font-semibold transition-all shadow-xs"
-              title="Thuật toán gộp sub thông minh SmartMergeEngine"
-            >
-              <GitMerge className="w-3.5 h-3.5 text-emerald-400" />
-              <span>SmartMerge</span>
-            </button>
-
-            {/* Veo Video Generator */}
-            <button
-              id="btn-open-veo-video"
-              onClick={() => setIsVeoVideoModalOpen(true)}
-              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-rose-600/30 hover:bg-rose-600/50 text-rose-300 border border-rose-500/40 text-xs font-semibold transition-all shadow-xs"
-              title="Tạo video hoạt hình từ ảnh bằng Veo (veo-3.1-fast-generate-preview 16:9 & 9:16)"
-            >
-              <Film className="w-3.5 h-3.5 text-rose-400" />
-              <span>Veo Video AI</span>
-            </button>
-
-            {/* AI Image & Poster Generator (gemini-nano-banana-2.1) */}
-            <button
-              id="btn-open-ai-image"
-              onClick={() => setIsAiImageModalOpen(true)}
-              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-amber-600/30 hover:bg-amber-600/50 text-amber-300 border border-amber-500/40 text-xs font-semibold transition-all shadow-xs"
-              title="Tạo poster & thumbnail video với gemini-nano-banana-2.1"
-            >
-              <ImageIcon className="w-3.5 h-3.5 text-amber-400" />
-              <span>Ảnh Bìa AI</span>
-            </button>
-
-            {/* Multimodal Image & Text OCR Translator */}
-            <button
-              id="btn-open-image-text-translator"
-              onClick={() => setIsImageTextTranslatorModalOpen(true)}
-              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-gradient-to-r from-cyan-600/30 to-blue-600/30 hover:from-cyan-600/50 hover:to-blue-600/50 text-cyan-300 border border-cyan-500/40 text-xs font-semibold transition-all shadow-xs"
-              title="Nhận diện & Dịch chữ trên hình ảnh, poster, văn bản sang Vietsub bằng Gemini Vision"
-            >
-              <Languages className="w-3.5 h-3.5 text-cyan-400" />
-              <span>Dịch Ảnh & Text</span>
-              <span className="hidden xl:inline-block text-[10px] font-bold px-1.5 py-0.2 rounded bg-cyan-500/30 text-cyan-200 border border-cyan-400/30 font-mono">
-                OCR
-              </span>
-            </button>
-
-            {/* Admin System Dashboard */}
-            <button
-              id="btn-open-admin-dashboard"
-              onClick={() => setIsAdminSystemModalOpen(true)}
-              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-rose-300 border border-rose-500/40 text-xs font-semibold transition-all shadow-xs"
-              title="Quản trị hiệu năng CPU, RAM, Feature Flags và Khóa bảo trì"
-            >
-              <Wrench className="w-3.5 h-3.5 text-rose-400" />
-              <span className="hidden sm:inline">Admin System</span>
-            </button>
-
-            {/* Firebase Auth & Firestore Sync */}
-            <button
-              id="btn-open-firebase-auth"
-              onClick={() => setIsAuthModalOpen(true)}
-              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-gradient-to-r from-amber-500/20 to-orange-500/20 hover:from-amber-500/30 hover:to-orange-500/30 text-amber-300 border border-amber-500/40 text-xs font-semibold transition-all shadow-xs"
-              title="Đăng nhập Google và Lưu trữ Dự án lên Firestore Cloud"
-            >
-              <Cloud className="w-3.5 h-3.5 text-amber-400" />
-              <span>{currentUser ? (currentUser.displayName?.split(" ")?.[0] || "Đã Đăng Nhập") : "Lưu Cloud"}</span>
-            </button>
-
-            {/* Science Skills Hub Modal Button */}
-            <button
-              id="btn-open-science-skills"
-              onClick={() => setIsScienceModalOpen(true)}
-              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-gradient-to-r from-teal-500/20 to-sky-500/20 hover:from-teal-500/35 hover:to-sky-500/35 text-teal-300 border border-teal-500/40 text-xs font-semibold transition-all shadow-xs"
-              title="Tra cứu & Chuẩn hóa thuật ngữ Khoa học, Y sinh (UniProt, PubChem, Europe PMC, AlphaFold DB)"
-            >
-              <Dna className="w-3.5 h-3.5 text-teal-400" />
-              <span>Khoa Học AI</span>
-              <span className="hidden xl:inline-block text-[10px] font-bold px-1.5 py-0.2 rounded bg-teal-500/30 text-teal-200 border border-teal-400/30 font-mono">
-                Science
-              </span>
+              <Users className="w-3.5 h-3.5 text-purple-400 shrink-0" />
+              <span>Thuyết Minh AI</span>
             </button>
 
             {/* Export Video & Subtitles Button */}
             <button
               id="btn-open-export-modal"
               onClick={() => setIsExportModalOpen(true)}
-              className="flex items-center gap-1.5 px-3 sm:px-3.5 py-2 rounded-xl bg-emerald-600/30 hover:bg-emerald-600/50 text-emerald-300 border border-emerald-500/40 font-semibold text-xs transition-all shadow-xs"
-              title="Xuất video lồng Vietsub hoặc kèm thuyết minh tiếng Việt AI"
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-emerald-600/30 hover:bg-emerald-600/50 text-emerald-300 border border-emerald-500/40 font-semibold text-xs transition shadow-xs cursor-pointer shrink-0 whitespace-nowrap"
+              title="Xuất video kèm Vietsub hoặc file .SRT"
             >
-              <Film className="w-3.5 h-3.5 text-emerald-400" />
+              <Download className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
               <span>Xuất Video & Sub</span>
-              <span className="hidden sm:inline-block text-[10px] font-bold px-1.5 py-0.2 rounded bg-emerald-500/30 text-emerald-200 border border-emerald-400/30">
-                Thuyết minh
-              </span>
+            </button>
+
+            {/* The Vertical Drawer Toggle Button ("đổi thành nằm dọc lúc nào cũng ẩn chỉ khi bấm vào mới hiện") */}
+            <button
+              id="btn-toggle-vertical-tools"
+              onClick={() => setIsVerticalDrawerOpen(true)}
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-gradient-to-r from-rose-600/20 via-purple-600/20 to-indigo-600/20 hover:from-rose-600/35 hover:to-indigo-600/35 text-rose-300 hover:text-white border border-rose-500/40 text-xs font-bold transition active:scale-95 shadow-md cursor-pointer shrink-0 whitespace-nowrap group"
+              title="Mở thanh công cụ dọc (Chỉ hiển thị các công cụ Vietsub)"
+            >
+              <Menu className="w-4 h-4 text-rose-400 shrink-0 group-hover:rotate-90 transition-transform duration-200" />
+              <span>Công Cụ Vietsub</span>
+            </button>
+
+            {/* Cloud User Profile */}
+            <button
+              id="btn-open-firebase-auth"
+              onClick={() => setIsAuthModalOpen(true)}
+              className="hidden lg:flex items-center gap-1.5 px-2.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800 text-xs font-semibold transition shadow-xs cursor-pointer shrink-0 whitespace-nowrap"
+              title="Đăng nhập & Lưu dự án Cloud"
+            >
+              <Cloud className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+              <span>{currentUser ? (currentUser.displayName?.split(" ")?.[0] || "Đã Đăng Nhập") : "Lưu Cloud"}</span>
             </button>
           </div>
         </div>
       </header>
+
+      {/* ============================================================ */}
+      {/* VERTICAL TOOLS DRAWER ("Nằm dọc lúc nào cũng ẩn, chỉ khi bấm vào mới hiện") */}
+      {/* ============================================================ */}
+      {isVerticalDrawerOpen && (
+        <div className="fixed inset-0 z-50 flex justify-end">
+          {/* Backdrop */}
+          <div
+            onClick={() => setIsVerticalDrawerOpen(false)}
+            className="fixed inset-0 bg-black/60 backdrop-blur-xs transition-opacity duration-300 cursor-pointer"
+          />
+
+          {/* Vertical Drawer Panel */}
+          <div className="relative w-80 sm:w-96 max-w-[85vw] h-full bg-slate-900 border-l border-slate-800 shadow-2xl flex flex-col z-10 text-slate-100">
+            {/* Drawer Header */}
+            <div className="p-4 border-b border-slate-800 flex items-center justify-between bg-slate-950/80">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-lg bg-rose-500/20 border border-rose-500/40 flex items-center justify-center text-rose-400">
+                  <Film className="w-4 h-4" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-white text-sm">Công Cụ Vietsub Studio</h3>
+                  <p className="text-[11px] text-slate-400">Dành riêng cho dịch & biên tập phụ đề</p>
+                </div>
+              </div>
+              <button
+                onClick={() => setIsVerticalDrawerOpen(false)}
+                className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition cursor-pointer"
+                title="Đóng thanh công cụ"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Drawer Vertical Tools List */}
+            <div className="flex-1 overflow-y-auto p-4 space-y-5">
+              {/* Nhóm 1: Dịch & Tạo Phụ Đề */}
+              <div>
+                <div className="text-[10px] font-bold uppercase tracking-wider text-rose-400 mb-2 px-1">
+                  1. Dịch & Tạo Phụ Đề Vietsub
+                </div>
+                <div className="space-y-1.5">
+                  <button
+                    onClick={() => {
+                      setIsVerticalDrawerOpen(false);
+                      setIsGenerateModalOpen(true);
+                    }}
+                    className="w-full flex items-center justify-between p-2.5 rounded-xl bg-gradient-to-r from-rose-600/20 to-amber-600/20 hover:from-rose-600/35 hover:to-amber-600/35 border border-rose-500/40 text-left transition group cursor-pointer"
+                  >
+                    <div className="flex items-center gap-2.5">
+                      <Sparkles className="w-4 h-4 text-rose-400 animate-pulse" />
+                      <div>
+                        <div className="text-xs font-bold text-white">Tạo Vietsub AI</div>
+                        <div className="text-[10px] text-slate-400">Chuyển âm thanh thành chữ & dịch</div>
+                      </div>
+                    </div>
+                    <ChevronRight className="w-4 h-4 text-slate-500 group-hover:text-white group-hover:translate-x-0.5 transition" />
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setIsVerticalDrawerOpen(false);
+                      setIsUniversalTranslatorModalOpen(true);
+                    }}
+                    className="w-full flex items-center justify-between p-2.5 rounded-xl bg-slate-950/60 hover:bg-slate-800/80 border border-slate-800 hover:border-pink-500/40 text-left transition group cursor-pointer"
+                  >
+                    <div className="flex items-center gap-2.5">
+                      <Globe className="w-4 h-4 text-pink-400" />
+                      <div>
+                        <div className="text-xs font-bold text-white">Dịch Mọi Link / Web</div>
+                        <div className="text-[10px] text-slate-400">YouTube, TikTok, Shorts, Reels</div>
+                      </div>
+                    </div>
+                    <ChevronRight className="w-4 h-4 text-slate-500 group-hover:text-white group-hover:translate-x-0.5 transition" />
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setIsVerticalDrawerOpen(false);
+                      setIsSocialImportModalOpen(true);
+                    }}
+                    className="w-full flex items-center justify-between p-2.5 rounded-xl bg-gradient-to-r from-pink-950/50 to-rose-950/50 hover:from-pink-900/60 hover:to-rose-900/60 border border-pink-500/40 text-left transition group cursor-pointer"
+                  >
+                    <div className="flex items-center gap-2.5">
+                      <Share2 className="w-4 h-4 text-pink-400" />
+                      <div>
+                        <div className="text-xs font-bold text-white">Nhập Video TikTok & FB Reels</div>
+                        <div className="text-[10px] text-slate-400">Tự trích xuất & làm Vietsub 1-click</div>
+                      </div>
+                    </div>
+                    <ChevronRight className="w-4 h-4 text-slate-500 group-hover:text-white group-hover:translate-x-0.5 transition" />
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setIsVerticalDrawerOpen(false);
+                      setIsRefineModalOpen(true);
+                    }}
+                    className="w-full flex items-center justify-between p-2.5 rounded-xl bg-slate-950/60 hover:bg-slate-800/80 border border-slate-800 hover:border-indigo-500/40 text-left transition group cursor-pointer"
+                  >
+                    <div className="flex items-center gap-2.5">
+                      <Sparkles className="w-4 h-4 text-indigo-400" />
+                      <div>
+                        <div className="text-xs font-bold text-white">AI Tối Ưu Câu Chữ</div>
+                        <div className="text-[10px] text-slate-400">Rút gọn câu, sửa ngữ pháp, trau chuốt</div>
+                      </div>
+                    </div>
+                    <ChevronRight className="w-4 h-4 text-slate-500 group-hover:text-white group-hover:translate-x-0.5 transition" />
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setIsVerticalDrawerOpen(false);
+                      setIsSmartMergeModalOpen(true);
+                    }}
+                    className="w-full flex items-center justify-between p-2.5 rounded-xl bg-slate-950/60 hover:bg-slate-800/80 border border-slate-800 hover:border-emerald-500/40 text-left transition group cursor-pointer"
+                  >
+                    <div className="flex items-center gap-2.5">
+                      <GitMerge className="w-4 h-4 text-emerald-400" />
+                      <div>
+                        <div className="text-xs font-bold text-white">Gộp Sub SmartMerge</div>
+                        <div className="text-[10px] text-slate-400">Thuật toán nối câu mượt mà</div>
+                      </div>
+                    </div>
+                    <ChevronRight className="w-4 h-4 text-slate-500 group-hover:text-white group-hover:translate-x-0.5 transition" />
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setIsVerticalDrawerOpen(false);
+                      setIsImageTextTranslatorModalOpen(true);
+                    }}
+                    className="w-full flex items-center justify-between p-2.5 rounded-xl bg-slate-950/60 hover:bg-slate-800/80 border border-slate-800 hover:border-cyan-500/40 text-left transition group cursor-pointer"
+                  >
+                    <div className="flex items-center gap-2.5">
+                      <Languages className="w-4 h-4 text-cyan-400" />
+                      <div>
+                        <div className="text-xs font-bold text-white">Dịch Ảnh & Text OCR</div>
+                        <div className="text-[10px] text-slate-400">Quét chữ trên ảnh bìa / poster</div>
+                      </div>
+                    </div>
+                    <ChevronRight className="w-4 h-4 text-slate-500 group-hover:text-white group-hover:translate-x-0.5 transition" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Nhóm 2: Lồng Tiếng & Hiệu Ứng Chữ */}
+              <div>
+                <div className="text-[10px] font-bold uppercase tracking-wider text-purple-400 mb-2 px-1">
+                  2. Lồng Tiếng & Kiểu Phụ Đề
+                </div>
+                <div className="space-y-1.5">
+                  <button
+                    onClick={() => {
+                      setIsVerticalDrawerOpen(false);
+                      setIsAutoVoiceoverModalOpen(true);
+                    }}
+                    className="w-full flex items-center justify-between p-2.5 rounded-xl bg-slate-950/60 hover:bg-slate-800/80 border border-slate-800 hover:border-rose-500/40 text-left transition group cursor-pointer"
+                  >
+                    <div className="flex items-center gap-2.5">
+                      <Users className="w-4 h-4 text-rose-400" />
+                      <div>
+                        <div className="text-xs font-bold text-white">Thuyết Minh AI Đa Giọng</div>
+                        <div className="text-[10px] text-slate-400">Phân vai Nam, Nữ, Già, Trẻ</div>
+                      </div>
+                    </div>
+                    <ChevronRight className="w-4 h-4 text-slate-500 group-hover:text-white group-hover:translate-x-0.5 transition" />
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setIsVerticalDrawerOpen(false);
+                      setIsCapCutModalOpen(true);
+                    }}
+                    className="w-full flex items-center justify-between p-2.5 rounded-xl bg-slate-950/60 hover:bg-slate-800/80 border border-slate-800 hover:border-purple-500/40 text-left transition group cursor-pointer"
+                  >
+                    <div className="flex items-center gap-2.5">
+                      <Zap className="w-4 h-4 text-purple-400 fill-current" />
+                      <div>
+                        <div className="text-xs font-bold text-white">Mẫu Chữ CapCut & Audio</div>
+                        <div className="text-[10px] text-slate-400">Preset karaoke & TikTok Safe Zone</div>
+                      </div>
+                    </div>
+                    <ChevronRight className="w-4 h-4 text-slate-500 group-hover:text-white group-hover:translate-x-0.5 transition" />
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setIsVerticalDrawerOpen(false);
+                      setIsStyleModalOpen(true);
+                    }}
+                    className="w-full flex items-center justify-between p-2.5 rounded-xl bg-slate-950/60 hover:bg-slate-800/80 border border-slate-800 hover:border-amber-500/40 text-left transition group cursor-pointer"
+                  >
+                    <div className="flex items-center gap-2.5">
+                      <Sliders className="w-4 h-4 text-amber-400" />
+                      <div>
+                        <div className="text-xs font-bold text-white">Tùy Chỉnh Kiểu Phụ Đề</div>
+                        <div className="text-[10px] text-slate-400">Font chữ, màu viền, bóng đổ, vị trí</div>
+                      </div>
+                    </div>
+                    <ChevronRight className="w-4 h-4 text-slate-500 group-hover:text-white group-hover:translate-x-0.5 transition" />
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setIsVerticalDrawerOpen(false);
+                      setIsCinemaModeOpen(true);
+                    }}
+                    className="w-full flex items-center justify-between p-2.5 rounded-xl bg-slate-950/60 hover:bg-slate-800/80 border border-slate-800 hover:border-rose-500/40 text-left transition group cursor-pointer"
+                  >
+                    <div className="flex items-center gap-2.5">
+                      <Maximize2 className="w-4 h-4 text-rose-400" />
+                      <div>
+                        <div className="text-xs font-bold text-white">Rạp Chiếu Toàn Màn Hình</div>
+                        <div className="text-[10px] text-slate-400">Chế độ xem phim không xao nhãng</div>
+                      </div>
+                    </div>
+                    <ChevronRight className="w-4 h-4 text-slate-500 group-hover:text-white group-hover:translate-x-0.5 transition" />
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setIsVerticalDrawerOpen(false);
+                      setIsCoverModalOpen(true);
+                    }}
+                    className="w-full flex items-center justify-between p-2.5 rounded-xl bg-slate-950/60 hover:bg-slate-800/80 border border-slate-800 hover:border-purple-500/40 text-left transition group cursor-pointer"
+                  >
+                    <div className="flex items-center gap-2.5">
+                      <Mic className="w-4 h-4 text-purple-400" />
+                      <div>
+                        <div className="text-xs font-bold text-white">Cover Bài Hát AI</div>
+                        <div className="text-[10px] text-slate-400">Giọng ca sĩ Sơn Tùng, Diva, Vũ...</div>
+                      </div>
+                    </div>
+                    <ChevronRight className="w-4 h-4 text-slate-500 group-hover:text-white group-hover:translate-x-0.5 transition" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Nhóm 3: Nhập, Xuất & Tiện Ích */}
+              <div>
+                <div className="text-[10px] font-bold uppercase tracking-wider text-emerald-400 mb-2 px-1">
+                  3. Tập Tin & Tiện Ích
+                </div>
+                <div className="space-y-1.5">
+                  <button
+                    onClick={() => {
+                      setIsVerticalDrawerOpen(false);
+                      setIsExportModalOpen(true);
+                    }}
+                    className="w-full flex items-center justify-between p-2.5 rounded-xl bg-emerald-950/40 hover:bg-emerald-950/70 border border-emerald-500/40 text-left transition group cursor-pointer"
+                  >
+                    <div className="flex items-center gap-2.5">
+                      <Film className="w-4 h-4 text-emerald-400" />
+                      <div>
+                        <div className="text-xs font-bold text-white">Xuất Video & Sub</div>
+                        <div className="text-[10px] text-slate-400">Tải video lồng phụ đề / file .SRT</div>
+                      </div>
+                    </div>
+                    <ChevronRight className="w-4 h-4 text-slate-500 group-hover:text-white group-hover:translate-x-0.5 transition" />
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setIsVerticalDrawerOpen(false);
+                      fileInputRef.current?.click();
+                    }}
+                    className="w-full flex items-center justify-between p-2.5 rounded-xl bg-slate-950/60 hover:bg-slate-800/80 border border-slate-800 text-left transition group cursor-pointer"
+                  >
+                    <div className="flex items-center gap-2.5">
+                      <Upload className="w-4 h-4 text-rose-400" />
+                      <div>
+                        <div className="text-xs font-bold text-white">Tải Video Lên</div>
+                        <div className="text-[10px] text-slate-400">Chọn tệp MP4, WebM, MOV</div>
+                      </div>
+                    </div>
+                    <ChevronRight className="w-4 h-4 text-slate-500 group-hover:text-white group-hover:translate-x-0.5 transition" />
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setIsVerticalDrawerOpen(false);
+                      setIsSampleModalOpen(true);
+                    }}
+                    className="w-full flex items-center justify-between p-2.5 rounded-xl bg-slate-950/60 hover:bg-slate-800/80 border border-slate-800 text-left transition group cursor-pointer"
+                  >
+                    <div className="flex items-center gap-2.5">
+                      <Video className="w-4 h-4 text-amber-400" />
+                      <div>
+                        <div className="text-xs font-bold text-white">Chọn Video Mẫu</div>
+                        <div className="text-[10px] text-slate-400">MV ca nhạc, phim ngắn thử nghiệm</div>
+                      </div>
+                    </div>
+                    <ChevronRight className="w-4 h-4 text-slate-500 group-hover:text-white group-hover:translate-x-0.5 transition" />
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setIsVerticalDrawerOpen(false);
+                      srtInputRef.current?.click();
+                    }}
+                    className="w-full flex items-center justify-between p-2.5 rounded-xl bg-slate-950/60 hover:bg-slate-800/80 border border-slate-800 text-left transition group cursor-pointer"
+                  >
+                    <div className="flex items-center gap-2.5">
+                      <FileText className="w-4 h-4 text-slate-400" />
+                      <div>
+                        <div className="text-xs font-bold text-white">Nhập Tệp .SRT / .VTT</div>
+                        <div className="text-[10px] text-slate-400">Nạp phụ đề đã có sẵn</div>
+                      </div>
+                    </div>
+                    <ChevronRight className="w-4 h-4 text-slate-500 group-hover:text-white group-hover:translate-x-0.5 transition" />
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setIsVerticalDrawerOpen(false);
+                      setIsBookmarkletModalOpen(true);
+                    }}
+                    className="w-full flex items-center justify-between p-2.5 rounded-xl bg-slate-950/60 hover:bg-slate-800/80 border border-slate-800 text-left transition group cursor-pointer"
+                  >
+                    <div className="flex items-center gap-2.5">
+                      <Bookmark className="w-4 h-4 text-amber-400 fill-current" />
+                      <div>
+                        <div className="text-xs font-bold text-white">Tiện Ích Bookmarklet 1-Click</div>
+                        <div className="text-[10px] text-slate-400">Dịch phụ đề trên mọi website</div>
+                      </div>
+                    </div>
+                    <ChevronRight className="w-4 h-4 text-slate-500 group-hover:text-white group-hover:translate-x-0.5 transition" />
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setIsVerticalDrawerOpen(false);
+                      setIsShortcutsModalOpen(true);
+                    }}
+                    className="w-full flex items-center justify-between p-2.5 rounded-xl bg-slate-950/60 hover:bg-slate-800/80 border border-slate-800 text-left transition group cursor-pointer"
+                  >
+                    <div className="flex items-center gap-2.5">
+                      <Keyboard className="w-4 h-4 text-indigo-400" />
+                      <div>
+                        <div className="text-xs font-bold text-white">Phím Tắt Nhanh (?)</div>
+                        <div className="text-[10px] text-slate-400">Tua video & lưu sửa phụ đề</div>
+                      </div>
+                    </div>
+                    <ChevronRight className="w-4 h-4 text-slate-500 group-hover:text-white group-hover:translate-x-0.5 transition" />
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setIsVerticalDrawerOpen(false);
+                      setIsAuthModalOpen(true);
+                    }}
+                    className="w-full flex items-center justify-between p-2.5 rounded-xl bg-slate-950/60 hover:bg-slate-800/80 border border-slate-800 text-left transition group cursor-pointer"
+                  >
+                    <div className="flex items-center gap-2.5">
+                      <Cloud className="w-4 h-4 text-amber-400" />
+                      <div>
+                        <div className="text-xs font-bold text-white">Lưu Dự Án Cloud</div>
+                        <div className="text-[10px] text-slate-400">{currentUser ? (currentUser.displayName || "Đã Đăng Nhập") : "Đăng nhập Google"}</div>
+                      </div>
+                    </div>
+                    <ChevronRight className="w-4 h-4 text-slate-500 group-hover:text-white group-hover:translate-x-0.5 transition" />
+                  </button>
+
+                  {/* Cổng Quản Trị & Lập Trình Viên (Admin & Senior Developer Dedicated Console) */}
+                  <button
+                    onClick={() => {
+                      setIsVerticalDrawerOpen(false);
+                      setCurrentView("admin_portal");
+                    }}
+                    className="w-full flex items-center justify-between p-2.5 rounded-xl bg-gradient-to-r from-indigo-950/60 to-purple-950/60 hover:from-indigo-900/80 hover:to-purple-900/80 border border-indigo-500/40 text-left transition group cursor-pointer mt-2"
+                    title="Dành riêng cho Quản trị viên và Người lập trình"
+                  >
+                    <div className="flex items-center gap-2.5">
+                      <ShieldCheck className="w-4 h-4 text-indigo-400" />
+                      <div>
+                        <div className="text-xs font-bold text-white flex items-center gap-1.5">
+                          <span>Cổng Quản Trị & Dev Console</span>
+                          <span className="text-[9px] bg-indigo-500/30 text-indigo-300 px-1.5 py-0.2 rounded font-mono">
+                            Admin
+                          </span>
+                        </div>
+                        <div className="text-[10px] text-slate-400">Chỉnh sửa mã nguồn, Flutter, TMA, Deploy</div>
+                      </div>
+                    </div>
+                    <ChevronRight className="w-4 h-4 text-slate-500 group-hover:text-white group-hover:translate-x-0.5 transition" />
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Toast notification banner */}
       {toastMessage && (
@@ -895,8 +1242,8 @@ export const App: React.FC = () => {
         {/* Left Column: Video Player & Controls (7 cols on lg) */}
         <div className="lg:col-span-7 flex flex-col gap-3 lg:overflow-y-auto lg:pr-1 min-h-0">
           {/* Video Title bar */}
-          <div className="flex items-center justify-between bg-slate-900/70 border border-slate-800/80 rounded-xl px-4 py-2.5">
-            <div className="flex items-center gap-2 overflow-hidden">
+          <div className="flex items-center justify-between bg-slate-900/70 border border-slate-800/80 rounded-xl px-4 py-2.5 shrink-0">
+            <div className="flex items-center gap-2 min-w-0">
               <Film className="w-4 h-4 text-rose-400 shrink-0" />
               <span className="text-xs sm:text-sm font-semibold truncate text-slate-200">
                 {videoTitle}
@@ -904,70 +1251,42 @@ export const App: React.FC = () => {
             </div>
             <div className="flex items-center gap-2 shrink-0">
               <span className="text-[11px] px-2 py-0.5 rounded-md bg-slate-800 text-slate-400 font-mono">
-                {cues.length} phụ đề
+                {cues.length} câu sub
               </span>
               <button
                 id="btn-toolbar-style"
                 onClick={() => setIsStyleModalOpen(true)}
-                className="p-1.5 rounded-lg hover:bg-slate-800 text-slate-400 hover:text-white transition-colors"
-                title="Tùy chỉnh phụ đề"
+                className="p-1.5 rounded-lg hover:bg-slate-800 text-slate-400 hover:text-amber-400 transition-colors cursor-pointer"
+                title="Tùy chỉnh kiểu phụ đề (Font, Màu, Vị trí)"
               >
                 <Sliders className="w-4 h-4" />
               </button>
+              <button
+                id="btn-toolbar-capcut"
+                onClick={() => setIsCapCutModalOpen(true)}
+                className="p-1.5 rounded-lg hover:bg-slate-800 text-slate-400 hover:text-purple-400 transition-colors cursor-pointer"
+                title="Mẫu chữ CapCut & Audio"
+              >
+                <Zap className="w-4 h-4" />
+              </button>
+              <button
+                id="btn-toolbar-cinema"
+                onClick={() => setIsCinemaModeOpen(true)}
+                className="p-1.5 rounded-lg hover:bg-slate-800 text-slate-400 hover:text-rose-400 transition-colors cursor-pointer"
+                title="Rạp chiếu toàn màn hình"
+              >
+                <Maximize2 className="w-4 h-4" />
+              </button>
+              <button
+                id="btn-toolbar-drawer-trigger"
+                onClick={() => setIsVerticalDrawerOpen(true)}
+                className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-rose-500/15 hover:bg-rose-500/25 text-rose-300 border border-rose-500/30 text-xs font-semibold transition active:scale-95 cursor-pointer"
+                title="Mở thanh công cụ dọc Vietsub (Dịch mọi link, Thuyết minh, Tiện ích...)"
+              >
+                <Menu className="w-3.5 h-3.5" />
+                <span className="hidden sm:inline">Công cụ Vietsub</span>
+              </button>
             </div>
-          </div>
-
-          {/* Quick Action Navigation Strip for Studio Features */}
-          <div className="flex items-center gap-2 overflow-x-auto pb-1 text-xs no-scrollbar">
-            <button
-              onClick={() => setIsAppDownloadModalOpen(true)}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-sky-500/15 hover:bg-sky-500/25 text-sky-300 border border-sky-500/30 shrink-0 font-medium transition"
-            >
-              <Download className="w-3.5 h-3.5 text-sky-400" />
-              <span>Tải App Native</span>
-            </button>
-            <button
-              onClick={() => setIsTelegramBotModalOpen(true)}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#24A1DE]/15 hover:bg-[#24A1DE]/25 text-sky-300 border border-[#24A1DE]/30 shrink-0 font-medium transition"
-            >
-              <Smartphone className="w-3.5 h-3.5 text-[#24A1DE]" />
-              <span>Telegram Bot / TMA</span>
-            </button>
-            <button
-              onClick={() => setIsGeminiChatbotModalOpen(true)}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-purple-500/15 hover:bg-purple-500/25 text-purple-300 border border-purple-500/30 shrink-0 font-medium transition"
-            >
-              <Bot className="w-3.5 h-3.5 text-purple-400" />
-              <span>Gemini AI Chat</span>
-            </button>
-            <button
-              onClick={() => setIsSmartMergeModalOpen(true)}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 border border-emerald-500/30 shrink-0 font-medium transition"
-            >
-              <GitMerge className="w-3.5 h-3.5 text-emerald-400" />
-              <span>SmartMerge Engine</span>
-            </button>
-            <button
-              onClick={() => setIsVeoVideoModalOpen(true)}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-rose-500/15 hover:bg-rose-500/25 text-rose-300 border border-rose-500/30 shrink-0 font-medium transition"
-            >
-              <Film className="w-3.5 h-3.5 text-rose-400" />
-              <span>Veo Video Generator</span>
-            </button>
-            <button
-              onClick={() => setIsAiImageModalOpen(true)}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border border-amber-500/30 shrink-0 font-medium transition"
-            >
-              <ImageIcon className="w-3.5 h-3.5 text-amber-400" />
-              <span>Ảnh Bìa Nano Banana</span>
-            </button>
-            <button
-              onClick={() => setIsScienceModalOpen(true)}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-teal-500/15 hover:bg-teal-500/25 text-teal-300 border border-teal-500/30 shrink-0 font-medium transition"
-            >
-              <Dna className="w-3.5 h-3.5 text-teal-400" />
-              <span>Khoa Học DeepMind</span>
-            </button>
           </div>
 
           {/* Video Player */}
@@ -1059,6 +1378,7 @@ export const App: React.FC = () => {
             onOpenSmartMerge={() => setIsSmartMergeModalOpen(true)}
             onMergeCues={handleMergeCues}
             onOpenVoiceoverModal={() => setIsAutoVoiceoverModalOpen(true)}
+            onUpdateCues={(updatedCues) => setCues(updatedCues)}
             onSaveEdits={() => {
               if (document.activeElement instanceof HTMLElement) {
                 document.activeElement.blur();
@@ -1069,20 +1389,21 @@ export const App: React.FC = () => {
         </div>
       </main>
 
-      {/* Modals */}
-      <AIGenerateModal
-        isOpen={isGenerateModalOpen}
-        onClose={() => {
-          setIsGenerateModalOpen(false);
-          setGenerationError(null);
-        }}
-        onGenerate={handleGenerateVietsub}
-        isProcessing={isProcessing}
-        progressStep={progressStep}
-        progressPercent={progressPercent}
-        errorMessage={generationError}
-        onClearError={() => setGenerationError(null)}
-      />
+      {/* Lazy-Loaded Modals Wrapped in Suspense */}
+      <React.Suspense fallback={null}>
+        <AIGenerateModal
+          isOpen={isGenerateModalOpen}
+          onClose={() => {
+            setIsGenerateModalOpen(false);
+            setGenerationError(null);
+          }}
+          onGenerate={handleGenerateVietsub}
+          isProcessing={isProcessing}
+          progressStep={progressStep}
+          progressPercent={progressPercent}
+          errorMessage={generationError}
+          onClearError={() => setGenerationError(null)}
+        />
 
       <AIRefineModal
         isOpen={isRefineModalOpen}
@@ -1192,6 +1513,24 @@ export const App: React.FC = () => {
       <CloudflareDeploymentModal
         isOpen={isCloudflareModalOpen}
         onClose={() => setIsCloudflareModalOpen(false)}
+        onNotify={showToast}
+      />
+
+      {/* TikTok, Facebook Reels, YouTube Shorts & Social Video Import Modal */}
+      <SocialVideoImportModal
+        isOpen={isSocialImportModalOpen}
+        onClose={() => setIsSocialImportModalOpen(false)}
+        onImportSuccess={(result) => {
+          setVideoUrl(result.videoUrl);
+          setVideoTitle(result.title);
+          if (result.initialCues && result.initialCues.length > 0) {
+            setCues(result.initialCues);
+          }
+          showToast(`Đã nhập thành công video từ ${result.platform?.toUpperCase() || "mạng xã hội"}!`, "success");
+          if (result.autoStartTranslate) {
+            setTimeout(() => setIsGenerateModalOpen(true), 350);
+          }
+        }}
         onNotify={showToast}
       />
 
@@ -1357,6 +1696,7 @@ export const App: React.FC = () => {
           if (proj.style) setSubtitleStyle(proj.style);
           showToast(`Đã mở dự án "${proj.title}" từ Cloud!`, "success");
         }}
+        onOpenAdminPortal={() => setCurrentView("admin_portal")}
       />
 
       {/* Google DeepMind Science Skills Studio Modal */}
@@ -1369,6 +1709,7 @@ export const App: React.FC = () => {
           showToast(`Đã chuẩn hóa thuật ngữ khoa học cho ${updatedCues.length} câu!`, "success");
         }}
       />
+      </React.Suspense>
 
       {/* Floating Minimized Export Status Badge */}
       {!isExportModalOpen && (
