@@ -30,11 +30,24 @@ export type SubtitleDisplayMode = 'vi' | 'bilingual' | 'original';
 
 export type SubtitlePosition = 'bottom' | 'top' | 'middle';
 
-export type CapCutAnimation = 'none' | 'karaoke-glow' | 'bounce' | 'fade' | 'typewriter' | 'zoom-in';
+export type CapCutAnimation = 'none' | 'karaoke-glow' | 'bounce' | 'fade' | 'typewriter' | 'zoom-in' | 'pop-up' | 'glow-wave';
 
-export type CapCutPreset = 'default' | 'tiktok-bold' | 'karaoke-glow' | 'cinema-yellow' | 'cyberpunk-neon' | 'box-highlight';
+export type CapCutPreset =
+  | 'default'
+  | 'tiktok-bold'
+  | 'karaoke-glow'
+  | 'cinema-yellow'
+  | 'cyberpunk-neon'
+  | 'box-highlight'
+  | 'vtv-news'
+  | 'pastel-anime'
+  | 'retro-gradient';
 
-export type AspectRatio = '16:9' | '9:16' | '1:1' | '4:5';
+export type CapCutBubbleStyle = 'none' | 'comic' | 'neon-border' | 'rounded-glass' | 'retro-badge' | 'minimal-pill';
+
+export type CapCutSpeedCurvePreset = 'standard' | 'montage' | 'hero' | 'bullet' | 'jump-cut' | 'flash' | 'custom';
+
+export type AspectRatio = '16:9' | '9:16' | '1:1' | '4:5' | '21:9';
 
 export interface SubtitleStyle {
   fontSize: 'sm' | 'base' | 'lg' | 'xl' | '2xl';
@@ -44,7 +57,7 @@ export interface SubtitleStyle {
   position: SubtitlePosition;
   displayMode: SubtitleDisplayMode;
   textShadow: boolean;
-  // CapCut Pro Features
+  // CapCut Pro Features (from https://www.capcut.com/vi-vn/)
   capcutPreset?: CapCutPreset;
   animation?: CapCutAnimation;
   strokeColor?: string;
@@ -55,6 +68,11 @@ export interface SubtitleStyle {
   uppercase?: boolean;
   aspectRatio?: AspectRatio;
   showTikTokSafeZone?: boolean;
+  bubbleStyle?: CapCutBubbleStyle;
+  textCurveRadius?: number; // -50 to +50
+  speedCurvePreset?: CapCutSpeedCurvePreset;
+  speedCurvePoints?: Array<{ x: number; y: number }>;
+  capcutVoiceId?: string;
 }
 
 export interface AudioEditConfig {

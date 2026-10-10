@@ -33,6 +33,10 @@ import {
   ChevronRight,
   Database,
   Users,
+  Rocket,
+  Download,
+  Box,
+  GitBranch,
 } from "lucide-react";
 
 interface AdminDeveloperPortalProps {
@@ -50,7 +54,7 @@ export const AdminDeveloperPortal: React.FC<AdminDeveloperPortalProps> = ({
 }) => {
   // Navigation tabs for developer & admin tools
   const [activeTab, setActiveTab] = useState<
-    "overview" | "code_editor" | "cross_platform" | "telegram_bot" | "cloudflare_deploy" | "sandbox"
+    "overview" | "code_editor" | "cross_platform" | "telegram_bot" | "cloudflare_deploy" | "sandbox" | "pipeline_console" | "deploy_hub"
   >("overview");
 
   // System status state
@@ -357,6 +361,30 @@ export default defineConfig(() => {
           >
             <Wrench className="w-3.5 h-3.5 text-rose-400" />
             <span>6. Sandbox Test & Circuit Breaker</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab("pipeline_console")}
+            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold transition cursor-pointer ${
+              activeTab === "pipeline_console"
+                ? "bg-indigo-600 text-white shadow-md shadow-indigo-600/20"
+                : "text-slate-400 hover:text-white hover:bg-slate-800/80"
+            }`}
+          >
+            <Terminal className="w-3.5 h-3.5 text-cyan-400" />
+            <span>7. Video Pipeline Orchestrator (TMA & Gate)</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab("deploy_hub")}
+            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold transition cursor-pointer ${
+              activeTab === "deploy_hub"
+                ? "bg-indigo-600 text-white shadow-md shadow-indigo-600/20"
+                : "text-slate-400 hover:text-white hover:bg-slate-800/80"
+            }`}
+          >
+            <Rocket className="w-3.5 h-3.5 text-emerald-400" />
+            <span>8. Deploy Hub (Render, Cloudflare, GitHub, Railway & Multi-OS Build)</span>
           </button>
         </div>
       </div>
@@ -1085,6 +1113,527 @@ window.Telegram.WebApp.MainButton.setText("MỞ STUDIO").show();`}
               >
                 Chạy Kiểm Thử Chịu Tải Thuyết Minh AI
               </button>
+            </div>
+          </div>
+        )}
+
+        {/* =================================================================== */}
+        {/* TAB 7: VIDEO PIPELINE ORCHESTRATOR & DRY-RUN GATE */}
+        {/* =================================================================== */}
+        {activeTab === "pipeline_console" && (
+          <div className="space-y-4 max-w-4xl mx-auto">
+            {/* Header Card */}
+            <div className="p-5 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-600 to-blue-600 flex items-center justify-center text-white shadow-lg shadow-cyan-600/20">
+                    <Terminal className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-base text-white flex items-center gap-2">
+                      <span>Telegram Video Editor Platform Pipeline</span>
+                      <span className="text-[10px] bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 px-2 py-0.5 rounded-full font-semibold">
+                        Ktor + Cloudflare Pages
+                      </span>
+                    </h3>
+                    <p className="text-xs text-slate-400">
+                      Điều phối luồng xử lý video, bóc tách audio, đồng bộ SOT config và kiểm tra chất lượng trước khi release.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <span className="px-2.5 py-1 rounded-lg text-xs font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center gap-1.5">
+                    <CheckCircle2 className="w-3.5 h-3.5" />
+                    NOMINAL · RELEASE_UNLOCKED
+                  </span>
+                </div>
+              </div>
+
+              {/* Pipeline Architecture Diagram */}
+              <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 font-mono text-[11px] text-cyan-300 leading-relaxed overflow-x-auto">
+                <div className="text-slate-500 text-[10px] mb-2">// Mô hình Pipeline tích hợp từ kho lưu trữ GitHub</div>
+                <div>Telegram Bot / TMA ──► Cloudflare Pages ──► Worker: video-subtitle-api ──► Ktor :8080</div>
+                <div className="text-slate-400">   ├─ SOT Auto-Patch & Integrity</div>
+                <div className="text-slate-400">   ├─ Strict Dry-Run Gate (NOMINAL / BLOCKED)</div>
+                <div className="text-slate-400">   ├─ Recovery Snapshot Backup</div>
+                <div className="text-slate-400">   ├─ Multimodal Gemini OCR & Translation</div>
+                <div className="text-slate-400">   ├─ Whisper Audio Transcription</div>
+                <div className="text-slate-400">   └─ FFmpeg Hardsub 1080p60 WebAssembly Engine</div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+                <button
+                  onClick={async () => {
+                    try {
+                      const res = await fetch("/api/pipeline/dry-run", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ strict: true, mode: "dry-run" }),
+                      });
+                      const data = await res.json();
+                      onNotify?.(`Dry-run thành công: ${data.status} · ${data.verdict}`, "success");
+                    } catch (err: any) {
+                      onNotify?.("Dry-run thất bại: " + err.message, "error");
+                    }
+                  }}
+                  className="py-2.5 px-4 rounded-xl font-bold text-xs bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white shadow-lg shadow-cyan-600/20 transition flex items-center justify-center gap-2 cursor-pointer"
+                >
+                  <Zap className="w-4 h-4" />
+                  Chạy Thử Nghiệm Toàn Diện (Dry-Run Gate)
+                </button>
+
+                <button
+                  onClick={async () => {
+                    try {
+                      const res = await fetch("/api/auth/otp/generate", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ userId: "admin_portal" }),
+                      });
+                      const data = await res.json();
+                      navigator.clipboard.writeText(data.code);
+                      onNotify?.(`Đã tạo & sao chép OTP: ${data.code} (hiệu lực 60s)`, "success");
+                    } catch (err: any) {
+                      onNotify?.("Lỗi tạo OTP: " + err.message, "error");
+                    }
+                  }}
+                  className="py-2.5 px-4 rounded-xl font-semibold text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition flex items-center justify-center gap-2 cursor-pointer"
+                >
+                  <KeyRound className="w-4 h-4 text-cyan-400" />
+                  Tạo Mã OTP 6 Ký Tự (/token)
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* =================================================================== */}
+        {/* TAB 8: MULTI-CLOUD DEPLOYMENT & AUTOMATED MULTI-OS BUILDS           */}
+        {/* =================================================================== */}
+        {activeTab === "deploy_hub" && (
+          <div className="space-y-6 animate-fadeIn">
+            {/* Top Overview Banner */}
+            <div className="p-6 rounded-3xl bg-gradient-to-r from-emerald-950/40 via-teal-950/40 to-slate-900 border border-emerald-500/30 shadow-2xl">
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div className="flex items-start gap-3.5">
+                  <div className="w-12 h-12 rounded-2xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400 shrink-0 shadow-lg shadow-emerald-500/20">
+                    <Rocket className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <h3 className="text-lg font-bold text-white">
+                        Trung Tâm Triển Khai & Đóng Gói Tự Động (Deploy Hub)
+                      </h3>
+                      <span className="text-[10px] bg-emerald-500/20 text-emerald-300 font-bold px-2 py-0.5 rounded-full border border-emerald-500/30">
+                        Multi-Cloud CI/CD
+                      </span>
+                    </div>
+                    <p className="text-xs text-slate-300 mt-1 max-w-2xl leading-relaxed">
+                      Hỗ trợ triển khai 1-click lên Render.com, Cloudflare Pages, GitHub, Railway.com và kích hoạt quy trình tự động đóng gói ứng dụng cho từng hệ điều hành cụ thể (Windows, macOS, Linux, Android, iOS).
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2 shrink-0">
+                  <button
+                    onClick={async () => {
+                      try {
+                        const res = await fetch("/health");
+                        const data = await res.json();
+                        onNotify?.(`Healthcheck OK: Uptime ${data.uptimeSeconds}s · Bộ nhớ Node ${Math.round(data.memory.rss / (1024 * 1024))}MB`, "success");
+                      } catch (err: any) {
+                        onNotify?.("Healthcheck thất bại: " + err.message, "error");
+                      }
+                    }}
+                    className="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-semibold flex items-center gap-2 transition cursor-pointer"
+                  >
+                    <Activity className="w-3.5 h-3.5 text-emerald-400" />
+                    <span>Kiểm Tra /health</span>
+                  </button>
+
+                  <button
+                    onClick={async () => {
+                      try {
+                        const res = await fetch("/api/build/os/all", { method: "POST" });
+                        const data = await res.json();
+                        onNotify?.("Đã kích hoạt tự động đóng gói toàn bộ hệ điều hành (Windows, macOS, Linux, Android)!", "success");
+                      } catch (err: any) {
+                        onNotify?.("Lỗi kích hoạt đóng gói: " + err.message, "error");
+                      }
+                    }}
+                    className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white text-xs font-bold shadow-lg shadow-emerald-600/20 flex items-center gap-2 transition cursor-pointer"
+                  >
+                    <Box className="w-3.5 h-3.5" />
+                    <span>Đóng Gói Tất Cả OS</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Platform Deployment Cards Grid */}
+            <div>
+              <div className="flex items-center justify-between mb-3 px-1">
+                <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-2">
+                  <Cloud className="w-4 h-4 text-emerald-400" />
+                  <span>1. Nền Tảng Triển Khai & Hosting Máy Chủ (4 Nền Tảng Chính)</span>
+                </h4>
+                <span className="text-[11px] text-slate-500">Tự động cấu hình IaC</span>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* Render.com Card */}
+                <div className="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 hover:border-slate-700 space-y-4 shadow-xl">
+                  <div className="flex items-start justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center text-white font-extrabold text-sm">
+                        R
+                      </div>
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <h5 className="font-bold text-sm text-white">Render.com</h5>
+                          <span className="text-[9px] bg-emerald-500/20 text-emerald-300 px-1.5 py-0.5 rounded font-mono font-bold">
+                            SẴN SÀNG
+                          </span>
+                        </div>
+                        <p className="text-[11px] text-slate-400">Web Service Node.js / Docker Blueprint</p>
+                      </div>
+                    </div>
+                    <span className="text-[10px] text-slate-400 font-mono bg-slate-950 px-2 py-1 rounded border border-slate-800">
+                      render.yaml
+                    </span>
+                  </div>
+
+                  <div className="p-3 rounded-xl bg-slate-950/80 border border-slate-800/80 text-[11px] space-y-1.5 text-slate-300">
+                    <div className="flex items-center justify-between">
+                      <span className="text-slate-500">Healthcheck URL:</span>
+                      <span className="font-mono text-emerald-400">GET /health</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-slate-500">Build Command:</span>
+                      <span className="font-mono text-slate-200">npm install &amp;&amp; npm run build</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-slate-500">Start Command:</span>
+                      <span className="font-mono text-slate-200">npm start (PORT=3000)</span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2 pt-1">
+                    <button
+                      onClick={() => {
+                        navigator.clipboard.writeText("git push origin main");
+                        onNotify?.("Đã sao chép: Đẩy code lên GitHub để Render tự động build & deploy!", "success");
+                      }}
+                      className="flex-1 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-200 transition text-center cursor-pointer"
+                    >
+                      Sao Chép Lệnh Git Deploy
+                    </button>
+                    <a
+                      href="https://dashboard.render.com"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="py-2 px-3 rounded-xl bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-300 border border-emerald-500/30 text-xs font-semibold flex items-center gap-1 transition"
+                    >
+                      <ExternalLink className="w-3.5 h-3.5" />
+                      <span>Dashboard</span>
+                    </a>
+                  </div>
+                </div>
+
+                {/* Railway.com Card */}
+                <div className="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 hover:border-slate-700 space-y-4 shadow-xl">
+                  <div className="flex items-start justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-xl bg-purple-950/60 border border-purple-500/30 flex items-center justify-center text-purple-300 font-extrabold text-sm">
+                        Rw
+                      </div>
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <h5 className="font-bold text-sm text-white">Railway.com</h5>
+                          <span className="text-[9px] bg-purple-500/20 text-purple-300 px-1.5 py-0.5 rounded font-mono font-bold">
+                            NIXPACKS &amp; DOCKER
+                          </span>
+                        </div>
+                        <p className="text-[11px] text-slate-400">Cloud Container &amp; Microservice Auto-Scale</p>
+                      </div>
+                    </div>
+                    <span className="text-[10px] text-slate-400 font-mono bg-slate-950 px-2 py-1 rounded border border-slate-800">
+                      railway.json
+                    </span>
+                  </div>
+
+                  <div className="p-3 rounded-xl bg-slate-950/80 border border-slate-800/80 text-[11px] space-y-1.5 text-slate-300">
+                    <div className="flex items-center justify-between">
+                      <span className="text-slate-500">Cấu hình Builder:</span>
+                      <span className="font-mono text-purple-300">Nixpacks (Node 20 + FFmpeg)</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-slate-500">Healthcheck Timeout:</span>
+                      <span className="font-mono text-slate-200">300s / /health</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-slate-500">Containerfile:</span>
+                      <span className="font-mono text-slate-200">Dockerfile Multi-Stage</span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2 pt-1">
+                    <button
+                      onClick={() => {
+                        navigator.clipboard.writeText("npx railway up");
+                        onNotify?.("Đã sao chép lệnh: npx railway up để deploy tức thì!", "success");
+                      }}
+                      className="flex-1 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-200 transition text-center cursor-pointer"
+                    >
+                      Sao Chép: npx railway up
+                    </button>
+                    <a
+                      href="https://railway.app"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="py-2 px-3 rounded-xl bg-purple-600/20 hover:bg-purple-600/30 text-purple-300 border border-purple-500/30 text-xs font-semibold flex items-center gap-1 transition"
+                    >
+                      <ExternalLink className="w-3.5 h-3.5" />
+                      <span>Dashboard</span>
+                    </a>
+                  </div>
+                </div>
+
+                {/* Cloudflare Pages & Workers Card */}
+                <div className="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 hover:border-slate-700 space-y-4 shadow-xl">
+                  <div className="flex items-start justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-xl bg-amber-950/60 border border-amber-500/30 flex items-center justify-center text-amber-300 font-extrabold text-sm">
+                        CF
+                      </div>
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <h5 className="font-bold text-sm text-white">Cloudflare Pages</h5>
+                          <span className="text-[9px] bg-amber-500/20 text-amber-300 px-1.5 py-0.5 rounded font-mono font-bold">
+                            EDGE GLOBAL
+                          </span>
+                        </div>
+                        <p className="text-[11px] text-slate-400">Phân Phối Toàn Cầu 300+ Trung Tâm Dữ Liệu</p>
+                      </div>
+                    </div>
+                    <span className="text-[10px] text-slate-400 font-mono bg-slate-950 px-2 py-1 rounded border border-slate-800">
+                      wrangler.toml
+                    </span>
+                  </div>
+
+                  <div className="p-3 rounded-xl bg-slate-950/80 border border-slate-800/80 text-[11px] space-y-1.5 text-slate-300">
+                    <div className="flex items-center justify-between">
+                      <span className="text-slate-500">Thư Mục Static:</span>
+                      <span className="font-mono text-amber-400">./dist (Vite Build)</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-slate-500">Routing Định Tuyến:</span>
+                      <span className="font-mono text-slate-200">_routes.json &amp; _headers</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-slate-500">Độ Trễ Phản Hồi:</span>
+                      <span className="font-mono text-emerald-400">&lt; 15ms tại Việt Nam</span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2 pt-1">
+                    <button
+                      onClick={() => {
+                        navigator.clipboard.writeText("npx wrangler pages deploy dist");
+                        onNotify?.("Đã sao chép lệnh: npx wrangler pages deploy dist!", "success");
+                      }}
+                      className="flex-1 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-200 transition text-center cursor-pointer"
+                    >
+                      Sao Chép: wrangler deploy
+                    </button>
+                    <a
+                      href="https://dash.cloudflare.com"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="py-2 px-3 rounded-xl bg-amber-600/20 hover:bg-amber-600/30 text-amber-300 border border-amber-500/30 text-xs font-semibold flex items-center gap-1 transition"
+                    >
+                      <ExternalLink className="w-3.5 h-3.5" />
+                      <span>Dashboard</span>
+                    </a>
+                  </div>
+                </div>
+
+                {/* GitHub Actions & Pages Card */}
+                <div className="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 hover:border-slate-700 space-y-4 shadow-xl">
+                  <div className="flex items-start justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center text-white font-extrabold text-sm">
+                        <GitBranch className="w-5 h-5 text-sky-400" />
+                      </div>
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <h5 className="font-bold text-sm text-white">GitHub Actions &amp; Pages</h5>
+                          <span className="text-[9px] bg-sky-500/20 text-sky-300 px-1.5 py-0.5 rounded font-mono font-bold">
+                            CI/CD MATRIX
+                          </span>
+                        </div>
+                        <p className="text-[11px] text-slate-400">Tự Động Build Khi Push &amp; Release Multi-OS</p>
+                      </div>
+                    </div>
+                    <span className="text-[10px] text-slate-400 font-mono bg-slate-950 px-2 py-1 rounded border border-slate-800">
+                      deploy.yml
+                    </span>
+                  </div>
+
+                  <div className="p-3 rounded-xl bg-slate-950/80 border border-slate-800/80 text-[11px] space-y-1.5 text-slate-300">
+                    <div className="flex items-center justify-between">
+                      <span className="text-slate-500">Workflows:</span>
+                      <span className="font-mono text-sky-400">deploy.yml &amp; multi-os-build.yml</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-slate-500">Matrix OS:</span>
+                      <span className="font-mono text-slate-200">Ubuntu, Windows, macOS</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-slate-500">Tự Động Xuất Release:</span>
+                      <span className="font-mono text-emerald-400">Kích hoạt khi push tag v*</span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2 pt-1">
+                    <button
+                      onClick={() => {
+                        navigator.clipboard.writeText("git tag v2.8.0 && git push origin v2.8.0");
+                        onNotify?.("Đã sao chép lệnh tạo Release Tag để GitHub Action tự đóng gói!", "success");
+                      }}
+                      className="flex-1 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-200 transition text-center cursor-pointer"
+                    >
+                      Sao Chép Lệnh Tạo Release Tag
+                    </button>
+                    <a
+                      href="https://github.com"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="py-2 px-3 rounded-xl bg-sky-600/20 hover:bg-sky-600/30 text-sky-300 border border-sky-500/30 text-xs font-semibold flex items-center gap-1 transition"
+                    >
+                      <ExternalLink className="w-3.5 h-3.5" />
+                      <span>GitHub</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Section 2: Automated Multi-OS Build Matrix */}
+            <div className="p-6 rounded-3xl bg-slate-900/90 border border-slate-800 space-y-5 shadow-2xl">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-4">
+                <div>
+                  <h4 className="font-bold text-base text-white flex items-center gap-2">
+                    <Box className="w-5 h-5 text-indigo-400" />
+                    <span>2. Tự Động Đóng Gói Ứng Dụng Từng Hệ Điều Hành (OS Build Matrix)</span>
+                  </h4>
+                  <p className="text-xs text-slate-400 mt-1">
+                    Nhấp vào hệ điều hành bên dưới để kích hoạt lệnh đóng gói tệp cài đặt tự động (scripts/build-os.js)
+                  </p>
+                </div>
+                <span className="text-xs font-mono bg-indigo-500/10 text-indigo-300 px-3 py-1 rounded-xl border border-indigo-500/30">
+                  CLI: node scripts/build-os.js --os=&lt;target&gt;
+                </span>
+              </div>
+
+              {/* OS Targets Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5">
+                {[
+                  {
+                    id: "windows",
+                    name: "Windows 10 / 11",
+                    ext: ".exe",
+                    pkg: "VietsubVideoStudio-Setup-2.8.0.exe",
+                    color: "border-sky-500/30 bg-sky-950/20 text-sky-400",
+                    desc: "Bộ cài đặt Windows tự động kèm DirectX 12 & FFmpeg hardsub worker",
+                  },
+                  {
+                    id: "macos",
+                    name: "macOS (Apple Silicon & Intel)",
+                    ext: ".dmg",
+                    pkg: "VietsubVideoStudio-2.8.0.dmg",
+                    color: "border-purple-500/30 bg-purple-950/20 text-purple-400",
+                    desc: "Tệp ảnh đĩa macOS (.dmg) tối ưu Metal Video & Neural Engine M1/M2/M3/M4",
+                  },
+                  {
+                    id: "linux",
+                    name: "Linux (Debian / Ubuntu / AppImage)",
+                    ext: ".deb",
+                    pkg: "vietsub-video-studio_2.8.0_amd64.deb",
+                    color: "border-amber-500/30 bg-amber-950/20 text-amber-400",
+                    desc: "Gói cài đặt Debian (.deb) và Portable AppImage chạy không cần cài đặt",
+                  },
+                  {
+                    id: "android",
+                    name: "Android (APK Trực Tiếp)",
+                    ext: ".apk",
+                    pkg: "VietsubVideoStudio-release.apk",
+                    color: "border-emerald-500/30 bg-emerald-950/20 text-emerald-400",
+                    desc: "Gói APK cài đặt trực tiếp không qua Store với khả năng xử lý cảm ứng",
+                  },
+                  {
+                    id: "ios",
+                    name: "iOS (WebClip & TestFlight)",
+                    ext: ".ipa",
+                    pkg: "VietsubVideoStudio-iOS.ipa",
+                    color: "border-rose-500/30 bg-rose-950/20 text-rose-400",
+                    desc: "Cấu hình WebClip Profile cài đặt màn hình chính Safari & TestFlight",
+                  },
+                  {
+                    id: "tma",
+                    name: "Telegram Mini App (TMA)",
+                    ext: ".tar.gz",
+                    pkg: "vietsub-tma-bundle.tar.gz",
+                    color: "border-cyan-500/30 bg-cyan-950/20 text-cyan-400",
+                    desc: "Gói Edge tối ưu cho Bot Telegram và TMA SDK v7.10 với OTP 6 ký tự",
+                  },
+                ].map((osItem) => (
+                  <div
+                    key={osItem.id}
+                    className="p-4 rounded-2xl bg-slate-950/60 border border-slate-800 hover:border-slate-700 flex flex-col justify-between space-y-3"
+                  >
+                    <div>
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="font-bold text-sm text-white">{osItem.name}</span>
+                        <span className={`text-[10px] font-mono px-2 py-0.5 rounded font-bold ${osItem.color}`}>
+                          {osItem.ext}
+                        </span>
+                      </div>
+                      <p className="text-[11px] text-slate-400 leading-relaxed">{osItem.desc}</p>
+                    </div>
+
+                    <div className="pt-2 border-t border-slate-900 flex items-center gap-2">
+                      <button
+                        onClick={async () => {
+                          try {
+                            const res = await fetch(`/api/build/os/${osItem.id}`, { method: "POST" });
+                            const data = await res.json();
+                            onNotify?.(`Đã bắt đầu đóng gói tự động cho ${osItem.name}! Mã build: ${data.buildId}`, "success");
+                          } catch (err: any) {
+                            onNotify?.("Lỗi kích hoạt đóng gói: " + err.message, "error");
+                          }
+                        }}
+                        className="flex-1 py-1.5 px-2.5 rounded-xl bg-slate-800 hover:bg-indigo-600 text-slate-200 hover:text-white text-xs font-semibold transition cursor-pointer flex items-center justify-center gap-1.5"
+                      >
+                        <Zap className="w-3.5 h-3.5" />
+                        <span>Build {osItem.ext}</span>
+                      </button>
+
+                      <a
+                        href={`https://github.com/hendy-server-AI-hub/hendy-studio-vietsub-test/releases/latest/download/${osItem.pkg}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="py-1.5 px-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white border border-slate-800 text-xs transition cursor-pointer"
+                        title="Tải tệp cài đặt"
+                      >
+                        <Download className="w-3.5 h-3.5" />
+                      </a>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         )}

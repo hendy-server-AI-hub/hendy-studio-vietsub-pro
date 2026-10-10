@@ -1,0 +1,22 @@
+# Render.com Infrastructure-as-Code Blueprint
+# Deploy Vietsub Video Studio with automated CI/CD and zero configuration
+services:
+  - type: web
+    name: vietsub-video-studio
+    runtime: node
+    plan: free
+    region: singapore # or oregon, frankfurt
+    branch: main
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3000
+      - key: VITE_APP_NAME
+        value: Vietsub Video Studio Pro
+      - key: GEMINI_API_KEY
+        sync: false # Set in Render Dashboard for security

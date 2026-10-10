@@ -6,8 +6,14 @@
   "scripts": {
     "dev": "tsx server.ts",
     "build": "vite build",
+    "build:os": "node scripts/build-os.js",
+    "build:windows": "node scripts/build-os.js --os=windows",
+    "build:macos": "node scripts/build-os.js --os=macos",
+    "build:linux": "node scripts/build-os.js --os=linux",
+    "build:android": "node scripts/build-os.js --os=android",
+    "build:all": "node scripts/build-os.js --os=all",
     "preview": "vite preview",
-    "clean": "rm -rf dist server.js",
+    "clean": "rm -rf dist server.js dist-os-packages",
     "lint": "tsc --noEmit",
     "start": "tsx server.ts"
   },

@@ -299,8 +299,28 @@ export const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>(({
     fade: "animate-fadeIn",
     "karaoke-glow": "animate-pulse drop-shadow-[0_0_15px_rgba(250,204,21,0.9)]",
     "zoom-in": "scale-105 transition-transform duration-200",
+    "pop-up": "animate-bounce scale-105",
+    "glow-wave": "animate-pulse drop-shadow-[0_0_20px_rgba(244,114,182,0.9)]",
     typewriter: "tracking-wider",
   }[subtitleStyle.animation || "none"];
+
+  // CapCut Bubble styling classes
+  const getBubbleClass = () => {
+    switch (subtitleStyle.bubbleStyle) {
+      case "comic":
+        return "bg-white text-black font-bold border-2 border-black rounded-2xl px-5 py-2.5 shadow-[4px_4px_0px_#000000]";
+      case "neon-border":
+        return "bg-slate-950/85 text-cyan-300 border-2 border-fuchsia-500 rounded-2xl px-5 py-2.5 shadow-[0_0_15px_rgba(217,70,239,0.8)]";
+      case "rounded-glass":
+        return "bg-slate-900/70 backdrop-blur-md text-white border border-white/25 rounded-3xl px-6 py-2.5 shadow-xl";
+      case "retro-badge":
+        return "bg-amber-400 text-slate-950 font-black border-2 border-amber-600 rounded-lg px-4 py-2 uppercase tracking-wider";
+      case "minimal-pill":
+        return "bg-black/85 text-white rounded-full px-6 py-2 border border-slate-700/80";
+      default:
+        return bgBoxClass;
+    }
+  };
 
   const fontModifiers = `${subtitleStyle.bold ? "font-extrabold" : "font-semibold"} ${
     subtitleStyle.italic ? "italic" : ""
@@ -320,6 +340,7 @@ export const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>(({
     "9:16": "aspect-[9/16] w-auto max-h-[72vh] mx-auto",
     "1:1": "aspect-square w-auto max-h-[66vh] mx-auto",
     "4:5": "aspect-[4/5] w-auto max-h-[70vh] mx-auto",
+    "21:9": "aspect-[21/9] w-full",
   }[subtitleStyle.aspectRatio || "16:9"];
 
   return (
@@ -375,13 +396,14 @@ export const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>(({
           )}
 
           <div
-            className={`max-w-[92%] sm:max-w-[85%] text-center leading-snug ${bgBoxClass} ${fontClass} ${fontModifiers} ${animationClass} transition-all`}
+            className={`max-w-[92%] sm:max-w-[85%] text-center leading-snug ${getBubbleClass()} ${fontClass} ${fontModifiers} ${animationClass} transition-all`}
             style={{
               color: subtitleStyle.textColor,
               textShadow: subtitleStyle.textShadow
                 ? "0 2px 4px rgba(0,0,0,0.9), 0 0 8px rgba(0,0,0,0.8), -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000"
                 : "none",
               ...textStrokeStyle,
+              transform: subtitleStyle.textCurveRadius ? `scale(1.02)` : undefined,
             }}
           >
             {/* Bilingual: show original language text on top if mode is bilingual */}

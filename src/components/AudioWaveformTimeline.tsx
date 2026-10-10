@@ -204,6 +204,15 @@ export const AudioWaveformTimeline: React.FC<AudioWaveformTimelineProps> = ({
     onSeek(targetSeconds);
   };
 
+  const handleTimelineTouch = (e: React.TouchEvent<HTMLDivElement>) => {
+    if (dragging || e.touches.length === 0) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const clickX = e.touches[0].clientX - rect.left;
+    const pct = Math.max(0, Math.min(1, clickX / rect.width));
+    const targetSeconds = pct * effectiveDuration;
+    onSeek(targetSeconds);
+  };
+
   // Dragging Cue Handles to resize start/end or move
   const handleStartDrag = (
     e: React.MouseEvent,
@@ -220,11 +229,27 @@ export const AudioWaveformTimeline: React.FC<AudioWaveformTimelineProps> = ({
     });
   };
 
+  const handleStartTouchDrag = (
+    e: React.TouchEvent,
+    cue: SubtitleCue,
+    edge: "start" | "end" | "move"
+  ) => {
+    e.stopPropagation();
+    if (!e.touches.length) return;
+    setDragging({
+      cueId: cue.id,
+      edge,
+      startX: e.touches[0].clientX,
+      initialStart: cue.start,
+      initialEnd: cue.end,
+    });
+  };
+
   useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
+    const handleMoveCoord = (clientX: number) => {
       if (!dragging || !containerRef.current) return;
       const rect = containerRef.current.getBoundingClientRect();
-      const deltaX = e.clientX - dragging.startX;
+      const deltaX = clientX - dragging.startX;
       const deltaSeconds = (deltaX / rect.width) * effectiveDuration;
 
       const targetCue = cues.find((c) => c.id === dragging.cueId);
@@ -264,7 +289,17 @@ export const AudioWaveformTimeline: React.FC<AudioWaveformTimelineProps> = ({
       }
     };
 
-    const handleMouseUp = () => {
+    const handleMouseMove = (e: MouseEvent) => {
+      handleMoveCoord(e.clientX);
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      if (e.touches.length > 0) {
+        handleMoveCoord(e.touches[0].clientX);
+      }
+    };
+
+    const handleEnd = () => {
       if (dragging) {
         setDragging(null);
       }
@@ -272,12 +307,18 @@ export const AudioWaveformTimeline: React.FC<AudioWaveformTimelineProps> = ({
 
     if (dragging) {
       window.addEventListener("mousemove", handleMouseMove);
-      window.addEventListener("mouseup", handleMouseUp);
+      window.addEventListener("mouseup", handleEnd);
+      window.addEventListener("touchmove", handleTouchMove, { passive: true });
+      window.addEventListener("touchend", handleEnd);
+      window.addEventListener("touchcancel", handleEnd);
     }
 
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("mouseup", handleMouseUp);
+      window.removeEventListener("mouseup", handleEnd);
+      window.removeEventListener("touchmove", handleTouchMove);
+      window.removeEventListener("touchend", handleEnd);
+      window.removeEventListener("touchcancel", handleEnd);
     };
   }, [dragging, cues, effectiveDuration, onUpdateCue]);
 
@@ -362,7 +403,8 @@ export const AudioWaveformTimeline: React.FC<AudioWaveformTimelineProps> = ({
         <div
           ref={containerRef}
           onClick={handleTimelineClick}
-          className="relative h-24 cursor-pointer"
+          onTouchStart={handleTimelineTouch}
+          className="relative h-24 cursor-pointer touch-none"
           style={{ width: `${zoom * 100}%`, minWidth: "100%" }}
         >
           {/* Waveform Canvas */}
@@ -404,14 +446,16 @@ export const AudioWaveformTimeline: React.FC<AudioWaveformTimelineProps> = ({
                   {/* Left Resizing Drag Handle */}
                   <div
                     onMouseDown={(e) => handleStartDrag(e, cue, "start")}
-                    className="absolute left-0 top-0 bottom-0 w-2 hover:w-3 cursor-ew-resize bg-rose-500/50 hover:bg-rose-400 rounded-l transition-all z-20"
+                    onTouchStart={(e) => handleStartTouchDrag(e, cue, "start")}
+                    className="absolute left-0 top-0 bottom-0 w-3 sm:w-2 hover:w-3.5 cursor-ew-resize bg-rose-500/50 hover:bg-rose-400 rounded-l transition-all z-20 touch-none"
                     title="Kéo để chỉnh mốc Bắt Đầu"
                   />
 
                   {/* Center Drag to move */}
                   <div
                     onMouseDown={(e) => handleStartDrag(e, cue, "move")}
-                    className="absolute inset-x-2 top-0 bottom-0 cursor-grab active:cursor-grabbing flex items-center px-1 overflow-hidden"
+                    onTouchStart={(e) => handleStartTouchDrag(e, cue, "move")}
+                    className="absolute inset-x-3 sm:inset-x-2 top-0 bottom-0 cursor-grab active:cursor-grabbing flex items-center px-1 overflow-hidden touch-none"
                   >
                     <span className="text-[10px] text-white font-semibold truncate leading-tight drop-shadow-md select-none">
                       #{cue.id}: {cue.textVi}
@@ -421,7 +465,8 @@ export const AudioWaveformTimeline: React.FC<AudioWaveformTimelineProps> = ({
                   {/* Right Resizing Drag Handle */}
                   <div
                     onMouseDown={(e) => handleStartDrag(e, cue, "end")}
-                    className="absolute right-0 top-0 bottom-0 w-2 hover:w-3 cursor-ew-resize bg-rose-500/50 hover:bg-rose-400 rounded-r transition-all z-20"
+                    onTouchStart={(e) => handleStartTouchDrag(e, cue, "end")}
+                    className="absolute right-0 top-0 bottom-0 w-3 sm:w-2 hover:w-3.5 cursor-ew-resize bg-rose-500/50 hover:bg-rose-400 rounded-r transition-all z-20 touch-none"
                     title="Kéo để chỉnh mốc Kết Thúc"
                   />
                 </div>

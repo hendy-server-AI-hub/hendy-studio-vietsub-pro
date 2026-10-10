@@ -5,6 +5,7 @@ interface TelegramBotModalProps {
   isOpen: boolean;
   onClose: () => void;
   onOpenDownloadModal?: () => void;
+  onOpenPipelineConsole?: () => void;
 }
 
 interface Message {
@@ -19,6 +20,7 @@ export const TelegramBotModal: React.FC<TelegramBotModalProps> = ({
   isOpen,
   onClose,
   onOpenDownloadModal,
+  onOpenPipelineConsole,
 }) => {
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -27,6 +29,7 @@ export const TelegramBotModal: React.FC<TelegramBotModalProps> = ({
       text: "👋 Xin chào! Tôi là Vietsub Bot (Hendy AI Hub). Bạn có thể gửi lệnh hoặc gửi video để bóc tách và dịch phụ đề tự động.",
       timestamp: "12:00",
       buttons: [
+        { text: "🎛️ Video Pipeline Console", action: "open_pipeline_console" },
         { text: "🚀 Mở AI Translation Mini App", action: "open_tma" },
         { text: "📥 Tải App Đa Nền Tảng", action: "open_download" },
       ],
@@ -131,8 +134,12 @@ export const TelegramBotModal: React.FC<TelegramBotModalProps> = ({
     if (btn.action === "open_download") {
       onClose();
       onOpenDownloadModal?.();
+    } else if (btn.action === "open_pipeline_console" || btn.action === "pipeline_dry_run" || btn.action === "get_pipeline_token") {
+      onClose();
+      onOpenPipelineConsole?.();
     } else if (btn.action === "open_tma") {
       onClose();
+      onOpenPipelineConsole?.();
     } else if (btn.action === "cmd_status") {
       handleSendMessage("/status");
     } else if (btn.action === "cmd_admin") {

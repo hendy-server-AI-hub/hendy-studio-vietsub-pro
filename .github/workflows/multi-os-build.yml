@@ -1,0 +1,56 @@
+name: Automated Multi-OS Build Matrix
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      target_os:
+        description: 'Target OS to build'
+        required: true
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - windows
+          - macos
+          - linux
+          - android
+
+jobs:
+  matrix-build:
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            target: linux
+            artifact_name: vietsub-studio-linux
+          - os: windows-latest
+            target: windows
+            artifact_name: vietsub-studio-windows
+          - os: macos-latest
+            target: macos
+            artifact_name: vietsub-studio-macos
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Compile Application & Package Target
+        run: node scripts/build-os.js --os=${{ matrix.target }}
+
+      - name: Upload OS Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact_name }}
+          path: dist-os-packages/
